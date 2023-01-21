@@ -1,5 +1,5 @@
 # Scholar Power
-A repository hosting the frontend code for the Scholar Power application.
+A repository hosting the frontend code for the Scholar Power application. Deployed site can be found on: https://deft-torte-4578e5.netlify.app/.
 ## Getting Started
 
 ### Getting a copy of the code
