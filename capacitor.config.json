@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Scholar Power",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
