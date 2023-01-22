@@ -1,6 +1,9 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useRef } from 'react';
 
+/**
+ * This component is the page responsible for signing up.
+ */
 const SignUp: React.FC = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);

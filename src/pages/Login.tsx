@@ -1,6 +1,9 @@
 import { IonContent, IonHeader, IonList, IonItem, IonPage, IonTitle, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { useRef } from 'react';
 
+/**
+ * This component is the page responsible for logging in.
+ */
 const Login: React.FC = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);

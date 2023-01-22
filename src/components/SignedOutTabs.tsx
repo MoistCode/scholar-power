@@ -11,6 +11,10 @@ import { ellipse, triangle } from 'ionicons/icons';
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
 
+/**
+ * This component is the main tab bar for the app. It contains the routes for
+ * the main pages of the app when the user is signed out.
+ */
 const SignedOutTabs: React.FC = () => (
   <IonTabs>
     <IonRouterOutlet>
