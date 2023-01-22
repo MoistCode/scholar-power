@@ -13,6 +13,10 @@ import StartWorkout from '../pages/StartWorkout';
 import CreateWorkout from '../pages/CreateWorkout';
 import History from '../pages/History';
 
+/**
+ * This component is the main tab bar for the app. It contains the routes for
+ * the main pages of the app when the user is signed in.
+ */
 const SignedInTabs: React.FC = () => (
   <IonTabs>
     <IonRouterOutlet>

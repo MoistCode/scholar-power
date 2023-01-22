@@ -1,5 +1,8 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
+/**
+ * This component is the page responsible for starting a workout.
+ */
 const StartWorkout: React.FC = () => {
   return (
     <IonPage>
