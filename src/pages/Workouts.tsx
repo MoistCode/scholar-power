@@ -1,5 +1,5 @@
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonIcon, IonPage } from '@ionic/react';
-import { createOutline } from 'ionicons/icons';
+import { createOutline, playOutline } from 'ionicons/icons';
 import Header from '../components/Header';
 import styles from './Workouts.module.css';
 
@@ -93,6 +93,9 @@ const WorkoutCard = (props: WorkoutCardProps) => {
       <div className={styles.createButtonContainer}>
         <IonButton fill="clear" >
           <IonIcon slot="icon-only" icon={createOutline} />
+        </IonButton>
+        <IonButton fill="clear" >
+          <IonIcon slot="icon-only" icon={playOutline} />
         </IonButton>
       </div>
     </IonCard>
