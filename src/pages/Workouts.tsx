@@ -4,7 +4,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
  * This component is the page responsible for displaying the user-generated
  * workouts.
  */
-const Workouts: React.FC = () => {
+const Workouts = () => {
   return (
     <IonPage>
       <IonHeader>

@@ -4,7 +4,7 @@ import { useRef } from 'react';
 /**
  * This component is the page responsible for logging in.
  */
-const Login: React.FC = () => {
+const Login = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
 

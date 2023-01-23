@@ -4,7 +4,7 @@ import { useRef } from 'react';
 /**
  * This component is the page responsible for signing up.
  */
-const SignUp: React.FC = () => {
+const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
 

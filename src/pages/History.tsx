@@ -3,7 +3,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 /**
  * This component is the page responsible for displaying the workout history.
  */
-const WorkoutHistory: React.FC = () => {
+const WorkoutHistory = () => {
   return (
     <IonPage>
       <IonHeader>

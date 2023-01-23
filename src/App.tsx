@@ -27,7 +27,7 @@ import SignedOutTabs from './components/SignedOutTabs';
 
 setupIonicReact();
 
-const App: React.FC = () => {
+const App = () => {
   let isLoggedIn = false;
 
   return (
