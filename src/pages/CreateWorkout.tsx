@@ -1,4 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for creating a new workout.
@@ -6,11 +7,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 const CreateWorkout = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Create Workout</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Create Workout" />
       <IonContent fullscreen>
         Create workout page example
       </IonContent>

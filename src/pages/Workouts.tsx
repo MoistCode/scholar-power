@@ -1,4 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for displaying the user-generated
@@ -7,11 +8,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 const Workouts = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Workouts</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Workouts" />
       <IonContent fullscreen>
         Workouts page example
       </IonContent>

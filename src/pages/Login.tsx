@@ -1,5 +1,6 @@
-import { IonContent, IonHeader, IonList, IonItem, IonPage, IonTitle, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
+import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { useRef } from 'react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for logging in.
@@ -10,11 +11,7 @@ const Login = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Login</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Welcome to Scholar Power!" />
       <IonContent fullscreen>
         <IonList>
           <IonItem>

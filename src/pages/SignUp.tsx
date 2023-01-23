@@ -1,5 +1,6 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import { useRef } from 'react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for signing up.
@@ -10,11 +11,7 @@ const SignUp = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Sign Up</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Register a new account" />
       <IonContent fullscreen>
         <IonList>
           <IonItem>

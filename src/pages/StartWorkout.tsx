@@ -1,4 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for starting a workout.
@@ -6,11 +7,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 const StartWorkout = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Start Workout</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Start Workout" />
       <IonContent fullscreen>
         Start workout page example
       </IonContent>

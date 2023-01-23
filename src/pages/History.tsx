@@ -1,4 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
+import Header from '../components/Header';
 
 /**
  * This component is the page responsible for displaying the workout history.
@@ -6,11 +7,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 const WorkoutHistory = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Workout History</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title="Workout History" />
       <IonContent fullscreen>
         Workout history page example
       </IonContent>
