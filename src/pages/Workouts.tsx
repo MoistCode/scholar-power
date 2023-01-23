@@ -1,5 +1,7 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonIcon, IonPage } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonIcon, IonPage, useIonActionSheet } from '@ionic/react';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { createOutline, playOutline } from 'ionicons/icons';
+import { useState } from 'react';
 import Header from '../components/Header';
 import styles from './Workouts.module.css';
 
@@ -80,6 +82,9 @@ const WorkoutCard = (props: WorkoutCardProps) => {
     description,
   } = props;
 
+  const [present] = useIonActionSheet();
+  const [result, setResult] = useState<OverlayEventDetail>();
+
   return (
     <IonCard>
       <IonCardHeader>
@@ -91,10 +96,55 @@ const WorkoutCard = (props: WorkoutCardProps) => {
         {description}
       </IonCardContent>
       <div className={styles.createButtonContainer}>
-        <IonButton fill="clear" >
+        <IonButton fill="clear"
+          onClick={() =>
+            present({
+              header: 'Edit your workout?',
+              buttons: [
+                {
+                  text: 'Yes',
+                  data: {
+                    action: 'editworkout',
+                  },
+                },
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  data: {
+                    action: 'cancel',
+                  },
+                },
+              ],
+              onDidDismiss: ({ detail }) => setResult(detail),
+            })
+          }
+        >
           <IonIcon slot="icon-only" icon={createOutline} />
         </IonButton>
-        <IonButton fill="clear" >
+        <IonButton
+          fill="clear"
+          onClick={() =>
+            present({
+              header: 'Start your workout?',
+              buttons: [
+                {
+                  text: 'Yes',
+                  data: {
+                    action: 'startworkout',
+                  },
+                },
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  data: {
+                    action: 'cancel',
+                  },
+                },
+              ],
+              onDidDismiss: ({ detail }) => setResult(detail),
+            })
+          }
+        >
           <IonIcon slot="icon-only" icon={playOutline} />
         </IonButton>
       </div>
