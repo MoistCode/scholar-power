@@ -7,7 +7,7 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/react';
-import { ellipse, triangle } from 'ionicons/icons';
+import { logInOutline, personAddOutline } from 'ionicons/icons';
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
 
@@ -30,11 +30,11 @@ const SignedOutTabs = () => (
     </IonRouterOutlet>
     <IonTabBar slot="bottom">
       <IonTabButton tab="signup" href="/signup">
-        <IonIcon icon={triangle} />
+        <IonIcon icon={personAddOutline} />
         <IonLabel>Sign Up</IonLabel>
       </IonTabButton>
       <IonTabButton tab="login" href="/login">
-        <IonIcon icon={ellipse} />
+        <IonIcon icon={logInOutline} />
         <IonLabel>Log In</IonLabel>
       </IonTabButton>
     </IonTabBar>

@@ -7,7 +7,7 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/react';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { addCircleOutline, barbellOutline, newspaperOutline, listOutline } from 'ionicons/icons';
 import Workouts from '../pages/Workouts';
 import StartWorkout from '../pages/StartWorkout';
 import CreateWorkout from '../pages/CreateWorkout';
@@ -38,20 +38,20 @@ const SignedInTabs = () => (
     </IonRouterOutlet>
     <IonTabBar slot="bottom">
       <IonTabButton tab="workouts" href="/workouts">
-        <IonIcon icon={triangle} />
+        <IonIcon icon={listOutline} />
         <IonLabel>Workouts</IonLabel>
       </IonTabButton>
       <IonTabButton tab="startworkout" href="/startworkout">
-        <IonIcon icon={ellipse} />
+        <IonIcon icon={barbellOutline} />
         <IonLabel>Start Workout</IonLabel>
       </IonTabButton>
       <IonTabButton tab="createworkout" href="/createworkout">
-        <IonIcon icon={square} />
+        <IonIcon icon={addCircleOutline} />
         <IonLabel>Create Workout</IonLabel>
       </IonTabButton>
       <IonTabButton tab="workouthistory" href="/workouthistory">
-        <IonIcon icon={square} />
-        <IonLabel>Workout History</IonLabel>
+        <IonIcon icon={newspaperOutline} />
+        <IonLabel>History</IonLabel>
       </IonTabButton>
     </IonTabBar>
   </IonTabs>
