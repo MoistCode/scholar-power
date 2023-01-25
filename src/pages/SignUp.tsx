@@ -1,13 +1,35 @@
 import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import { useRef } from 'react';
 import Header from '../components/Header';
-
+console.log(process.env)
 /**
  * This component is the page responsible for signing up.
  */
 const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
+
+  const onSignUp = async () => {
+    let username = usernameInputRef?.current?.value;
+    let password = passwordInputRef?.current?.value;
+
+    let response = await fetch('http://0.0.0.0:3000/api/v1/user/2',{
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({
+        username,
+        password_hash: password,
+      }),
+      credentials: 'include',
+    });
+
+    console.log(response);
+  }
 
   return (
     <IonPage>
@@ -32,7 +54,7 @@ const SignUp = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline">
+            <IonButton fill="outline" onClick={onSignUp}>
               <IonIcon slot="primary"/>
               Sign Up
             </IonButton>
