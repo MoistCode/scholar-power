@@ -83,6 +83,7 @@ const WorkoutCard = (props: WorkoutCardProps) => {
   } = props;
 
   const [present] = useIonActionSheet();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<OverlayEventDetail>();
 
   return (
