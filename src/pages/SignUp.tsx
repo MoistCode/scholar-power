@@ -1,7 +1,7 @@
 import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import { useRef } from 'react';
 import Header from '../components/Header';
-console.log(process.env)
+
 /**
  * This component is the page responsible for signing up.
  */
@@ -13,7 +13,7 @@ const SignUp = () => {
     let username = usernameInputRef?.current?.value;
     let password = passwordInputRef?.current?.value;
 
-    let response = await fetch('http://0.0.0.0:3000/api/v1/user/2',{
+    let response = await fetch('http://0.0.0.0:3000/api/v1/user/',{
       method: 'POST',
       mode: 'cors',
       headers: {
