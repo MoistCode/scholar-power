@@ -13,7 +13,7 @@ const SignUp = () => {
     let username = usernameInputRef?.current?.value;
     let password = passwordInputRef?.current?.value;
 
-    let response = await fetch('https://test.seismos.io:3000/api/v1/user/',{
+    let response = await fetch('https://test.seismos.io/api/v1/user/',{
       method: 'POST',
       mode: 'cors',
       headers: {
