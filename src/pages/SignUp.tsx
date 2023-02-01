@@ -1,6 +1,7 @@
 import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import { useRef } from 'react';
 import Header from '../components/Header';
+import useFetch from '../hooks/useFetch';
 
 /**
  * This component is the page responsible for signing up.
@@ -9,23 +10,16 @@ const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
 
+  let createNewUser = useFetch();
+
   const onSignUp = async () => {
     let username = usernameInputRef?.current?.value;
     let password = passwordInputRef?.current?.value;
 
-    let response = await fetch('https://test.seismos.io/api/v1/user',{
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-      credentials: 'include',
+    let response = await createNewUser({
+      variables: { username, password },
+      endpoint: '/api/v1/user',
+      method: 'POST'
     });
 
     console.log(response);
