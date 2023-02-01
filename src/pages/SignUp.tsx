@@ -22,7 +22,7 @@ const SignUp = () => {
       method: 'POST'
     });
 
-    console.log(response);
+    console.log(response.json());
   }
 
   return (
