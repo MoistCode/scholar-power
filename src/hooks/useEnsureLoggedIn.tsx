@@ -7,19 +7,20 @@ export function useEnsureLoggedIn() {
   let [ token, setToken ] = useState<string>();
 
   useEffect(() => {
-    let userToken = localStorage.getItem('user_token');
+    if (!token) {
+      let userToken = localStorage.getItem('user_token');
   
-    if (userToken) {
-      let decodedToken = jwt_decode(userToken) as string;
-      console.log('cowman123', decodedToken);
+      if (userToken) {
+        let decodedToken = jwt_decode(userToken) as string;
+    
+        // if (decodedToken && (Date.now() >= decodedToken?.exp * 1000)) {
+    
+        // }    
   
-      // if (decodedToken && (Date.now() >= decodedToken?.exp * 1000)) {
-  
-      // }    
-
-      setToken(decodedToken);
+        setToken(decodedToken);
+      }
     }
-  }, [])
+  }, [token])
 
   
   console.log('cowman useEnsureLoggedIn', token);
