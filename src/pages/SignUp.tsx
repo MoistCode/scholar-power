@@ -3,7 +3,7 @@ import { useRef } from 'react';
 
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
-import { useEnsureLoggedIn } from '../hooks/useIsLoggedIn';
+import { useEnsureLoggedIn } from '../hooks/useEnsureLoggedIn';
 
 /**
  * This component is the page responsible for signing up.
