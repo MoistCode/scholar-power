@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import jwt_decode from 'jwt-decode';
 
 
@@ -16,16 +16,17 @@ export function useEnsureLoggedIn() {
         // if (decodedToken && (Date.now() >= decodedToken?.exp * 1000)) {
     
         // }    
-  
-        setToken(decodedToken);
+        console.log('cowman useEffect', userToken, decodedToken);
+        // setToken(decodedToken);
       }
     }
   }, [token])
 
   
   console.log('cowman useEnsureLoggedIn', token);
-  return {
+
+  return useMemo(() => ({
     isLoggedIn: Boolean(token),
     setToken,
-  };
+  }), [token, setToken])
 }
