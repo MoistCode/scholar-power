@@ -2,6 +2,9 @@
   "name": "scholar-power",
   "version": "0.0.1",
   "private": true,
+  "browser": {
+    "crypto": false
+  },
   "dependencies": {
     "@capacitor/app": "4.1.1",
     "@capacitor/core": "4.6.2",
