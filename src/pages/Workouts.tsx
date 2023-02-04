@@ -54,6 +54,7 @@ const exampleListOfWorkouts = [
  * workouts.
  */
 const Workouts = () => {
+  let { isLoggedIn } = useEnsureLoggedIn();
   return (
     <IonPage>
       <Header title="Workouts" />
@@ -157,4 +158,8 @@ interface WorkoutCardProps {
   title: string;
   subtitle: string;
   description: string;
+}
+
+function useEnsureLoggedIn(): { isLoggedIn: any; } {
+  throw new Error('Function not implemented.');
 }
