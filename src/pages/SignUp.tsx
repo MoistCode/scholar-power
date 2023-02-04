@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, useIonRouter } from '@ionic/react';
 import { useRef } from 'react';
 
 import Header from '../components/Header';
@@ -15,6 +15,8 @@ const SignUp = () => {
   let createNewUser = useFetch();
   let { setToken } = useEnsureLoggedIn();
 
+  let router = useIonRouter()
+
   const onSignUp = async () => {
     let username = usernameInputRef?.current?.value;
     let password = passwordInputRef?.current?.value;
@@ -30,6 +32,7 @@ const SignUp = () => {
     if (userToken) {
       localStorage.setItem('user_token', userToken);
       setToken(userToken);
+      router.push('/workouts');
     }
   }
 
