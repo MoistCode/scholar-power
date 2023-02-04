@@ -3,6 +3,7 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 import { createOutline, playOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import Header from '../components/Header';
+import { useEnsureLoggedIn } from '../hooks/useEnsureLoggedIn';
 import styles from './Workouts.module.css';
 
 // TODO: Replace this with a call to the API.
@@ -159,8 +160,4 @@ interface WorkoutCardProps {
   title: string;
   subtitle: string;
   description: string;
-}
-
-function useEnsureLoggedIn(): { isLoggedIn: any; } {
-  throw new Error('Function not implemented.');
 }
