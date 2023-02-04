@@ -1,5 +1,5 @@
 import { useState } from "react";
-import jwt from 'jsonwebtoken';
+import jwt_decode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
 
 
@@ -10,7 +10,7 @@ export function useEnsureLoggedIn() {
   let history = useHistory();
 
   if (userToken) {
-    let decodedToken = jwt.decode(userToken, {complete: true});
+    let decodedToken = jwt_decode(userToken);
     console.log('cowman123', decodedToken);
     // if (decodedToken && (Date.now() >= decodedToken?.exp * 1000)) {
 
