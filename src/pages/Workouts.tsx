@@ -55,6 +55,7 @@ const exampleListOfWorkouts = [
  */
 const Workouts = () => {
   let { isLoggedIn } = useEnsureLoggedIn();
+  console.log(isLoggedIn);
   return (
     <IonPage>
       <Header title="Workouts" />
