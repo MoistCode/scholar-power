@@ -24,7 +24,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SignedInTabs from './components/SignedInTabs';
 import SignedOutTabs from './components/SignedOutTabs';
-import { useEnsureLoggedIn } from './hooks/useIsLoggedIn';
+import { useEnsureLoggedIn } from './hooks/useEnsureLoggedIn';
 
 setupIonicReact();
 

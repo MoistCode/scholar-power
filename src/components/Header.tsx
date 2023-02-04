@@ -1,6 +1,6 @@
 import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons, IonIcon, useIonAlert } from "@ionic/react";
 import { personCircle } from "ionicons/icons";
-import { useEnsureLoggedIn } from "../hooks/useIsLoggedIn";
+import { useEnsureLoggedIn } from "../hooks/useEnsureLoggedIn";
 const Header = (props: HeaderProps) => {
   let {
     title,
