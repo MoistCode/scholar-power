@@ -27,7 +27,7 @@ const SignUp = () => {
 
     if (userToken) {
       localStorage.setItem('user_token', userToken);
-      window.location.reload();
+      window.location.href = window.location.origin;
     }
   }
 
