@@ -7,6 +7,9 @@ export function useEnsureLoggedIn() {
   let [ token, setToken ] = useState<string>();
 
   useEffect(() => {
+    console.log('cowman useEffect token', token);
+    console.log('cowman useEffect ls', localStorage.getItem('user_token'));
+
     if (!token) {
       let userToken = localStorage.getItem('user_token');
   
