@@ -6,12 +6,12 @@ export function useIsLoggedIn() {
   let userToken = localStorage.getItem('user_token');
   
   if (userToken) {
-    let decodedToken = jwt_decode(userToken) as string;
+    let { expired_at: expiredAt } = jwt_decode(userToken) as { expired_at: string };
 
-    // if (decodedToken && (Date.now() >= decodedToken?.exp * 1000)) {
-
-    // }    
-    console.log('cowman useEffect', userToken, decodedToken);
+    if (new Date() >= new Date(expiredAt)) {
+      localStorage.removeItem('user_token');
+      window.location.href = window.location.origin;
+    }    
   }
 
   return Boolean(userToken);
