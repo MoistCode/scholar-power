@@ -24,17 +24,16 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SignedInTabs from './components/SignedInTabs';
 import SignedOutTabs from './components/SignedOutTabs';
-import useToken from './hooks/useToken';
+import { useEnsureLoggedIn } from './hooks/useIsLoggedIn';
 
 setupIonicReact();
 
 const App = () => {
-  let { token } = useToken();
-
+  let { isLoggedIn } = useEnsureLoggedIn()
   return (
     <IonApp>
       <IonReactRouter>
-        {Boolean(token) ? <SignedInTabs /> : <SignedOutTabs />}
+        {isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />}
       </IonReactRouter>
     </IonApp>
   );

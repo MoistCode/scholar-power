@@ -1,20 +1,19 @@
 import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons, IonIcon, useIonAlert } from "@ionic/react";
 import { personCircle } from "ionicons/icons";
-import useToken from "../hooks/useToken";
-
+import { useEnsureLoggedIn } from "../hooks/useIsLoggedIn";
 const Header = (props: HeaderProps) => {
   let {
     title,
   } = props;
 
-  let { token } = useToken();
   const [presentAlert] = useIonAlert();
+  let { isLoggedIn } = useEnsureLoggedIn();
 
   return (
     <IonHeader>
       <IonToolbar>
         <IonTitle>{title}</IonTitle>
-        {token &&
+        {isLoggedIn &&
           <IonButtons slot="secondary">
             <IonButton
               onClick={() =>
