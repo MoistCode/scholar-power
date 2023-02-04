@@ -29,14 +29,19 @@ import { useEnsureLoggedIn } from './hooks/useEnsureLoggedIn';
 setupIonicReact();
 
 const App = () => {
-  let { isLoggedIn } = useEnsureLoggedIn()
   return (
     <IonApp>
       <IonReactRouter>
-        {isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />}
+        <NavigationalTabs />
       </IonReactRouter>
     </IonApp>
   );
 };
+
+const NavigationalTabs = () => {
+  let { isLoggedIn } = useEnsureLoggedIn();
+  console.log('cowman NavigationalTabs', isLoggedIn);
+  return isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />;
+}
 
 export default App;
