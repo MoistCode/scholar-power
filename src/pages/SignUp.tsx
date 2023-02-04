@@ -3,7 +3,6 @@ import { useRef } from 'react';
 
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
-import { useEnsureLoggedIn } from '../hooks/useEnsureLoggedIn';
 
 /**
  * This component is the page responsible for signing up.
@@ -13,7 +12,6 @@ const SignUp = () => {
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
 
   let createNewUser = useFetch();
-  let { setToken } = useEnsureLoggedIn();
 
   let router = useIonRouter()
 
@@ -31,7 +29,6 @@ const SignUp = () => {
 
     if (userToken) {
       localStorage.setItem('user_token', userToken);
-      setToken(userToken);
       router.push('/workouts');
     }
   }

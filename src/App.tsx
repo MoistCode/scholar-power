@@ -24,7 +24,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SignedInTabs from './components/SignedInTabs';
 import SignedOutTabs from './components/SignedOutTabs';
-import { useEnsureLoggedIn } from './hooks/useEnsureLoggedIn';
+import { useIsLoggedIn } from './hooks/useIsLoggedIn';
 
 setupIonicReact();
 
@@ -39,7 +39,7 @@ const App = () => {
 };
 
 const NavigationalTabs = () => {
-  let { isLoggedIn } = useEnsureLoggedIn();
+  let isLoggedIn = useIsLoggedIn();
   console.log('cowman NavigationalTabs', isLoggedIn);
   return isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />;
 }

@@ -3,7 +3,7 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 import { createOutline, playOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import Header from '../components/Header';
-import { useEnsureLoggedIn } from '../hooks/useEnsureLoggedIn';
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn';
 import styles from './Workouts.module.css';
 
 // TODO: Replace this with a call to the API.
@@ -55,7 +55,7 @@ const exampleListOfWorkouts = [
  * workouts.
  */
 const Workouts = () => {
-  let { isLoggedIn } = useEnsureLoggedIn();
+  let isLoggedIn = useIsLoggedIn();
   console.log(isLoggedIn);
   return (
     <IonPage>
