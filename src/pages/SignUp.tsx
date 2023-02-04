@@ -1,6 +1,5 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, useIonRouter } from '@ionic/react';
 import { useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
@@ -14,7 +13,7 @@ const SignUp = () => {
 
   let createNewUser = useFetch();
 
-  let history = useHistory();
+  let router = useIonRouter()
 
   const onSignUp = async () => {
     let username = usernameInputRef?.current?.value;
@@ -30,7 +29,7 @@ const SignUp = () => {
 
     if (userToken) {
       localStorage.setItem('user_token', userToken);
-      history.push('/workouts');
+      router.push('/workouts');
     }
   }
 
