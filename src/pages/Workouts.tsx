@@ -1,9 +1,21 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonIcon, IonPage, useIonActionSheet } from '@ionic/react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonIcon,
+  IonPage,
+  useIonActionSheet,
+  IonModal,
+} from '@ionic/react';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { createOutline, playOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Header from '../components/Header';
-import { useIsLoggedIn } from '../hooks/useIsLoggedIn';
+import { EditOrCreateWorkout } from './CreateWorkout';
 import styles from './Workouts.module.css';
 
 // TODO: Replace this with a call to the API.
@@ -55,8 +67,6 @@ const exampleListOfWorkouts = [
  * workouts.
  */
 const Workouts = () => {
-  let isLoggedIn = useIsLoggedIn();
-  console.log(isLoggedIn);
   return (
     <IonPage>
       <Header title="Workouts" />
@@ -89,70 +99,59 @@ const WorkoutCard = (props: WorkoutCardProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<OverlayEventDetail>();
 
-  return (
-    <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>{subtitle}</IonCardSubtitle>
-      </IonCardHeader>
+  let modalId = `open-edit-modal-${title.replace(' ', '')}`;
 
-      <IonCardContent>
-        {description}
-      </IonCardContent>
-      <div className={styles.createButtonContainer}>
-        <IonButton fill="clear"
-          onClick={() =>
-            present({
-              header: 'Edit your workout?',
-              buttons: [
-                {
-                  text: 'Yes',
-                  data: {
-                    action: 'editworkout',
+  return (
+    <>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>{title}</IonCardTitle>
+          <IonCardSubtitle>{subtitle}</IonCardSubtitle>
+        </IonCardHeader>
+
+        <IonCardContent>
+          {description}
+        </IonCardContent>
+        <div className={styles.createButtonContainer}>
+          <IonButton fill="clear" id={modalId}>
+            <IonIcon slot="icon-only" icon={createOutline} />
+          </IonButton>
+          <IonButton
+            fill="clear"
+            onClick={() =>
+              present({
+                header: 'Start this workout?',
+                buttons: [
+                  {
+                    text: 'Yes',
+                    data: {
+                      action: 'startworkout',
+                    },
                   },
-                },
-                {
-                  text: 'Cancel',
-                  role: 'cancel',
-                  data: {
-                    action: 'cancel',
+                  {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    data: {
+                      action: 'cancel',
+                    },
                   },
-                },
-              ],
-              onDidDismiss: ({ detail }) => setResult(detail),
-            })
-          }
-        >
-          <IonIcon slot="icon-only" icon={createOutline} />
-        </IonButton>
-        <IonButton
-          fill="clear"
-          onClick={() =>
-            present({
-              header: 'Start your workout?',
-              buttons: [
-                {
-                  text: 'Yes',
-                  data: {
-                    action: 'startworkout',
-                  },
-                },
-                {
-                  text: 'Cancel',
-                  role: 'cancel',
-                  data: {
-                    action: 'cancel',
-                  },
-                },
-              ],
-              onDidDismiss: ({ detail }) => setResult(detail),
-            })
-          }
-        >
-          <IonIcon slot="icon-only" icon={playOutline} />
-        </IonButton>
-      </div>
-    </IonCard>
+                ],
+                onDidDismiss: ({ detail }) => setResult(detail),
+              })
+            }
+          >
+            <IonIcon slot="icon-only" icon={playOutline} />
+          </IonButton>
+        </div>
+      </IonCard>
+
+      <EditWorkoutModal
+        modalId={modalId}
+        titleDefaultValue={title}
+        subtitleDefaultValue={subtitle}
+        descriptionDefaultValue={description}
+      />
+    </>
   );
 }
 
@@ -160,4 +159,43 @@ interface WorkoutCardProps {
   title: string;
   subtitle: string;
   description: string;
+}
+
+const EditWorkoutModal = (props: any) => {
+  let {
+    modalId,
+    titleDefaultValue,
+    subtitleDefaultValue,
+    descriptionDefaultValue,
+  } = props;
+
+  const modal = useRef<HTMLIonModalElement>(null);
+  let titleInputRef = useRef<HTMLIonInputElement>(null);
+  let subtitleInputRef = useRef<HTMLIonInputElement>(null);
+  let descriptionTextAreaRef = useRef<HTMLIonTextareaElement>(null);
+
+  const onEditWorkout = () => {
+    console.log('cowman finished editing workout');
+  }
+
+  const onDismiss = () => {
+    modal.current?.dismiss();
+  }
+
+  return (
+    <IonModal ref={modal} trigger={modalId}>
+      <EditOrCreateWorkout
+        headerTitle="Edit Workout"
+        titleInputRef={titleInputRef}
+        subtitleInputRef={subtitleInputRef}
+        descriptionTextAreaRef={descriptionTextAreaRef}
+        primaryButtonText="Submit"
+        onSubmit={onEditWorkout}
+        titleDefaultValue={titleDefaultValue}
+        subtitleDefaultValue={subtitleDefaultValue}
+        descriptionDefaultValue={descriptionDefaultValue}
+        onDismiss={onDismiss}
+      />
+    </IonModal>
+  );
 }
