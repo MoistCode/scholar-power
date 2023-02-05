@@ -168,6 +168,8 @@ const AddExerciseModal = ({ modalId }: any) => {
   const getAndSaveExercisesToLocalStorage = useCallback(async (selectedMuscleGroup: string) => {
     setShowLoading(true);
 
+    console.log('cowman123', process.env);
+
     let res = await fetch(`https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscleGroup}` ,{
       method: 'GET',
       // @ts-expect-error
