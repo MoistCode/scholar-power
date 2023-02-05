@@ -40,7 +40,6 @@ const App = () => {
 
 const NavigationalTabs = () => {
   let isLoggedIn = useIsLoggedIn();
-  console.log('cowman NavigationalTabs', isLoggedIn);
   return isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />;
 }
 
