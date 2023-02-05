@@ -134,11 +134,13 @@ export const EditOrCreateWorkout = (props: any) => {
           </IonButtons>
         </IonToolbar>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton strong={true} onClick={onDismiss}>
-                Back
-              </IonButton>
-          </IonButtons>
+          {onDismiss &&
+            <IonButtons slot="start">
+              <IonButton strong={true} onClick={onDismiss}>
+                  Back
+                </IonButton>
+            </IonButtons>
+          }
           <IonButtons slot="secondary">
             <IonButton fill="solid" onClick={onSubmit}>
               <IonIcon slot="primary"/>
@@ -167,8 +169,6 @@ const AddExerciseModal = ({ modalId }: any) => {
 
   const getAndSaveExercisesToLocalStorage = useCallback(async (selectedMuscleGroup: string) => {
     setShowLoading(true);
-
-    console.log('cowman123', process.env);
 
     let res = await fetch(`https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscleGroup}` ,{
       method: 'GET',
