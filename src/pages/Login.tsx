@@ -1,6 +1,7 @@
 import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { useRef } from 'react';
 import Header from '../components/Header';
+import useFetch from '../hooks/useFetch';
 
 /**
  * This component is the page responsible for logging in.
@@ -8,6 +9,26 @@ import Header from '../components/Header';
 const Login = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
+
+  let signInUser = useFetch();
+
+  const onLogIn = async () => {
+    let username = usernameInputRef?.current?.value;
+    let password = passwordInputRef?.current?.value;
+
+    let response = await signInUser({
+      variables: { username, password },
+      endpoint: '/api/v1/auth',
+      method: 'POST'
+    });
+
+    let userToken = await response.json();
+
+    if (userToken) {
+      localStorage.setItem('user_token', userToken);
+      window.location.href = window.location.origin;
+    }
+  }
 
   return (
     <IonPage>
@@ -32,7 +53,7 @@ const Login = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline">
+            <IonButton fill="outline" onClick={onLogIn}>
               <IonIcon slot="primary"/>
               Login
             </IonButton>
