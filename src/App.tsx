@@ -24,7 +24,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import SignedInTabs from './components/SignedInTabs';
 import SignedOutTabs from './components/SignedOutTabs';
-import { useIsLoggedIn } from './hooks/useIsLoggedIn';
+import { useLoggedInUser } from './hooks/useLoggedInUser';
 
 setupIonicReact();
 
@@ -39,8 +39,8 @@ const App = () => {
 };
 
 const NavigationalTabs = () => {
-  let isLoggedIn = useIsLoggedIn();
-  return isLoggedIn ? <SignedInTabs /> : <SignedOutTabs />;
+  let loggedInUser = useLoggedInUser();
+  return loggedInUser?.username ? <SignedInTabs /> : <SignedOutTabs />;
 }
 
 export default App;

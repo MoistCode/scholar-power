@@ -7,7 +7,12 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/react';
-import { addCircleOutline, newspaperOutline, listOutline } from 'ionicons/icons';
+import {
+  addCircleOutline,
+  newspaperOutline,
+  listOutline,
+} from 'ionicons/icons';
+
 import Workouts from '../pages/Workouts';
 import CreateWorkout from '../pages/CreateWorkout';
 import History from '../pages/History';

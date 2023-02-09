@@ -8,6 +8,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { logInOutline, personAddOutline } from 'ionicons/icons';
+
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
 

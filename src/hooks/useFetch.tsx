@@ -28,4 +28,4 @@ type FetchProps = {
   variables: object;
   endpoint: string;
   method: 'GET'|'POST';
-}
+};
