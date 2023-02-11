@@ -7,7 +7,7 @@ const WorkoutList = (props: any) => {
 
   return (
     <>
-      {workouts.map((workout: any) => (
+      {workouts?.map((workout: any) => (
         <WorkoutCard key={workout.PlanID} workout={workout} />
       ))}
     </>
