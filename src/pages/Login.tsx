@@ -1,5 +1,5 @@
-import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { useRef } from 'react';
+import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon, IonAlert } from '@ionic/react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
 
@@ -9,26 +9,37 @@ import useFetch from '../hooks/useFetch';
 const Login = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
+  const [showAlert, setShowAlert] = useState(false);
 
-  let signInUser = useFetch();
+  const {
+    fetchDataFn: signInUser,
+    clearError: signInUserClearError,
+    loading: signInUserLoading,
+    error: signInUserError,
+    data: signInUserData,
+  } = useFetch();
 
   const onLogIn = async () => {
     let username = usernameInputRef?.current?.value;
     let password = passwordInputRef?.current?.value;
 
-    let response = await signInUser({
+    await signInUser({
       variables: { username, password },
       endpoint: '/api/v1/auth',
       method: 'POST'
     });
+  };
 
-    let userToken = await response.json();
-
-    if (userToken) {
-      localStorage.setItem('user_token', userToken);
+  useEffect(() => {
+    if (!signInUserLoading && !signInUserError && signInUserData) {
+      localStorage.setItem('user_token', signInUserData);
       window.location.href = window.location.origin;
     }
-  }
+
+    if (signInUserError && !showAlert) {
+      setShowAlert(true);
+    }
+  }, [showAlert, signInUserData, signInUserError, signInUserLoading])
 
   return (
     <IonPage>
@@ -53,12 +64,22 @@ const Login = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline" onClick={onLogIn}>
+            <IonButton fill="outline" onClick={onLogIn} disabled={signInUserLoading}>
               <IonIcon slot="primary"/>
               Login
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <IonAlert
+          isOpen={Boolean(signInUserError) && showAlert}
+          onDidDismiss={() => {
+            signInUserClearError();
+            setShowAlert(false);
+          }}
+          header="Invalid Credentials"
+          message="Looks like the credentials you've entered are invalid. Please try again."
+          buttons={['OK']}
+        />
       </IonContent>
     </IonPage>
   );
