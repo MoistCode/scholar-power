@@ -28,7 +28,6 @@ export default function useFetch() {
       let json = await res.json();
   
       setData(json);
-      setLoading(false);
     } catch (err: any) {
       setError(err);
       setLoading(false);
