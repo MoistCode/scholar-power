@@ -22,7 +22,7 @@ export default function useFetch() {
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
         },
-        body: JSON.stringify(variables),
+        body: variables ? JSON.stringify(variables) : undefined,
         credentials: 'include',
       });
 
@@ -47,7 +47,7 @@ export default function useFetch() {
 }
 
 type FetchProps = {
-  variables: object;
+  variables?: object;
   endpoint: string;
   method: 'GET'|'POST';
 };

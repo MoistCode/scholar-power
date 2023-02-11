@@ -60,10 +60,7 @@ export const useWorkoutList = () => {
   const getAllWorkoutsFn = useCallback(async () => {
     console.log('Fetching workouts...');
     await getAllWorkouts({
-      variables: {
-        name: loggedInUser?.username,
-      },
-      endpoint: '/api/v1/workout/user',
+      endpoint: `/api/v1/workout/user/${loggedInUser?.username}`,
       method: 'GET',
     });
   }, [getAllWorkouts, loggedInUser?.username]);
