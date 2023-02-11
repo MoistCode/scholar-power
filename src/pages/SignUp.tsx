@@ -33,7 +33,6 @@ const SignUp = () => {
   }
 
   useEffect(() => {
-    console.log(signUpUserLoading, signUpUserError, signUpUserData);
     if (!signUpUserLoading && !signUpUserError && signUpUserData) {
       localStorage.setItem('user_token', signUpUserData);
       window.location.href = window.location.origin;

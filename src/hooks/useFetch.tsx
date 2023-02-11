@@ -30,6 +30,7 @@ export default function useFetch() {
       setData(json);
     } catch (err: any) {
       setError(err);
+    } finally {
       setLoading(false);
     }
   }, []);
