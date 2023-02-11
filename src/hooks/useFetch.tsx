@@ -11,6 +11,7 @@ export default function useFetch() {
 
   let fetchDataFn = useCallback(async ({ variables, endpoint, method }: FetchProps) => {
     setLoading(true);
+    setError(null);
 
     try {
       let res = await fetch(`${baseUrl}${endpoint}`,{
@@ -28,6 +29,7 @@ export default function useFetch() {
       let json = await res.json();
   
       setData(json);
+      setError(null);
     } catch (err: any) {
       setError(err);
     } finally {

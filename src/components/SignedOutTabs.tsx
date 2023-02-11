@@ -11,6 +11,7 @@ import { logInOutline, personAddOutline } from 'ionicons/icons';
 
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
+import Playground from '../pages/Playground';
 
 /**
  * This component is the main tab bar for the app. It contains the routes for
@@ -19,6 +20,9 @@ import Login from '../pages/Login';
 const SignedOutTabs = () => (
   <IonTabs>
     <IonRouterOutlet>
+      <Route exact path="/playground">
+        <Playground />
+      </Route>
       <Route exact path="/signup">
         <SignUp />
       </Route>
