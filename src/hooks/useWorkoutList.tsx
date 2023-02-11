@@ -58,6 +58,7 @@ export const useWorkoutList = () => {
   } = useFetch();
 
   const getAllWorkoutsFn = useCallback(async () => {
+    console.log('Fetching workouts...');
     await getAllWorkouts({
       variables: {
         name: loggedInUser?.username,
@@ -70,7 +71,12 @@ export const useWorkoutList = () => {
   useEffect(() => {
     getAllWorkoutsFn();
   }, [getAllWorkoutsFn])
-
+  console.log('workout props', {
+    refetchFn: getAllWorkoutsFn,
+    loading,
+    error,
+    data,
+  });
   if (process.env.REACT_APP_ENV === 'development') {
     return {
       refetchFn: getAllWorkoutsFn,
