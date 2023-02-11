@@ -1,27 +1,46 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 let baseUrl = process.env.REACT_APP_ENV === 'development'
   ? 'http://0.0.0.0:3000'
   : 'https://test.seismos.io';
 
 export default function useFetch() {
-  let fetchDataFn = useCallback(async ({ variables, endpoint, method }: FetchProps) => {
-    let res = await fetch(`${baseUrl}${endpoint}`,{
-      method,
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
-      },
-      body: JSON.stringify(variables),
-      credentials: 'include',
-    });
+  let [loading, setLoading] = useState(false);
+  let [error, setError] = useState(null);
+  let [data, setData] = useState(null);
 
-    return res;
+  let fetchDataFn = useCallback(async ({ variables, endpoint, method }: FetchProps) => {
+    setLoading(true);
+
+    try {
+      let res = await fetch(`${baseUrl}${endpoint}`,{
+        method,
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
+        },
+        body: JSON.stringify(variables),
+        credentials: 'include',
+      });
+
+      let json = await res.json();
+  
+      setData(json);
+    } catch (err: any) {
+      setError(err);
+      setLoading(false);
+    }
   }, []);
 
-  return fetchDataFn;
+  return {
+    fetchDataFn,
+    clearError: () => setError(null),
+    loading,
+    error,
+    data,
+  };
 }
 
 type FetchProps = {
