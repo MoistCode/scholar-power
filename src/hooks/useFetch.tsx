@@ -14,6 +14,7 @@ export default function useFetch() {
     setError(null);
 
     try {
+      console.log('cowman usefetch', process.env.REACT_APP_API_KEY)
       let res = await fetch(`${baseUrl}${endpoint}`,{
         method,
         mode: 'cors',
