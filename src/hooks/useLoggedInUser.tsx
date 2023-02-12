@@ -19,7 +19,7 @@ export function useLoggedInUser() {
     window.location.href = window.location.origin;
   }    
 
-  return { username };
+  return { token: userToken, username };
 }
 
 type DecodedToken = { expired_at: string; username: string };

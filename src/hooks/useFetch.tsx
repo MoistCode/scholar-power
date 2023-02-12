@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useLoggedInUser } from './useLoggedInUser';
 
 let baseUrl = process.env.REACT_APP_ENV === 'development'
   ? 'http://0.0.0.0:3000'
@@ -8,20 +9,20 @@ export default function useFetch() {
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState(null);
   let [data, setData] = useState(null);
+  let { token } = useLoggedInUser() || {};
 
   let fetchDataFn = useCallback(async ({ variables, endpoint, method }: FetchProps) => {
     setLoading(true);
     setError(null);
 
     try {
-      console.log('cowman usefetch', process.env.REACT_APP_API_KEY)
       let res = await fetch(`${baseUrl}${endpoint}`,{
         method,
         mode: 'cors',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: variables ? JSON.stringify(variables) : undefined,
         credentials: 'include',
