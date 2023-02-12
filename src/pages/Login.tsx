@@ -1,4 +1,16 @@
-import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon } from '@ionic/react';
+import { 
+  IonButton, 
+  IonButtons, 
+  IonContent, 
+  IonIcon, 
+  IonInput, 
+  IonItem, 
+  IonLabel, 
+  IonList, 
+  IonPage, 
+  IonToolbar
+} from '@ionic/react';
+import { chevronForward } from "ionicons/icons";
 import { useRef } from 'react';
 import Header from '../components/Header';
 
@@ -15,14 +27,20 @@ const Login = () => {
       <IonContent fullscreen>
         <IonList>
           <IonItem>
-            <IonLabel>Username</IonLabel>
+            <IonLabel>
+              <p>Log into an account</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem fill="outline">
+            <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
               placeholder="Enter username"
             />
           </IonItem>
-          <IonItem>
-            <IonLabel>Password</IonLabel>
+          <p></p>
+          <IonItem fill="outline">
+            <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}
               placeholder="Enter password"
@@ -32,9 +50,9 @@ const Login = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline">
-              <IonIcon slot="primary"/>
-              Login
+            <IonButton fill="solid" color="primary">
+              <IonLabel>Log In</IonLabel>
+              <IonIcon slot="end" icon={chevronForward}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>

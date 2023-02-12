@@ -1,28 +1,49 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { 
+  IonButton, 
+  IonButtons, 
+  IonContent, 
+  IonIcon, 
+  IonInput, 
+  IonItem, 
+  IonLabel, 
+  IonList, 
+  IonPage, 
+  IonToolbar
+} from '@ionic/react';
+import { chevronForward } from "ionicons/icons";
 import { useRef } from 'react';
 import Header from '../components/Header';
 
 /**
  * This component is the page responsible for signing up.
  */
+
+// TODO: add Ionic alerts for invalid username/password
+
 const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
 
   return (
     <IonPage>
-      <Header title="Register a new account" />
+      <Header title="Welcome to Scholar Power!" />
       <IonContent fullscreen>
         <IonList>
           <IonItem>
-            <IonLabel>Username</IonLabel>
+            <IonLabel>
+              <p>Register a new account</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem fill="outline">
+            <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
               placeholder="Enter username"
             />
           </IonItem>
-          <IonItem>
-            <IonLabel>Password</IonLabel>
+          <p></p>
+          <IonItem fill="outline">
+            <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}
               placeholder="Enter password"
@@ -32,9 +53,9 @@ const SignUp = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline">
-              <IonIcon slot="primary"/>
-              Sign Up
+            <IonButton fill="solid" color="primary">
+              <IonLabel>Sign Up</IonLabel>
+              <IonIcon slot="end" icon={chevronForward}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
