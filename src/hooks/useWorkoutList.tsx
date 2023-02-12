@@ -68,6 +68,7 @@ export const useWorkoutList = () => {
   useEffect(() => {
     getAllWorkoutsFn();
   }, [getAllWorkoutsFn])
+  console.log('process.env', process.env);
   console.log('workout props', {
     refetchFn: getAllWorkoutsFn,
     loading,
