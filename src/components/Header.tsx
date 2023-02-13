@@ -1,20 +1,29 @@
-import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons, IonIcon, useIonAlert } from "@ionic/react";
-import { personCircle } from "ionicons/icons";
-import useToken from "../hooks/useToken";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButton,
+  IonButtons,
+  IonIcon,
+  useIonAlert,
+} from '@ionic/react';
+import { personCircle } from 'ionicons/icons';
+
+import { useLoggedInUser } from '../hooks/useLoggedInUser';
 
 const Header = (props: HeaderProps) => {
   let {
     title,
   } = props;
 
-  let { token } = useToken();
   const [presentAlert] = useIonAlert();
+  let loggedInUser = useLoggedInUser();
 
   return (
     <IonHeader>
       <IonToolbar>
         <IonTitle>{title}</IonTitle>
-        {token &&
+        {loggedInUser?.username &&
           <IonButtons slot="secondary">
             <IonButton
               onClick={() =>
@@ -36,6 +45,6 @@ const Header = (props: HeaderProps) => {
 
 export default Header;
 
-interface HeaderProps {
+type HeaderProps = {
   title: string;
-}
+};

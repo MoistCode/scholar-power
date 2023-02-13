@@ -7,10 +7,16 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/react';
-import { addCircleOutline, newspaperOutline, listOutline } from 'ionicons/icons';
+import {
+  addCircleOutline,
+  newspaperOutline,
+  listOutline,
+} from 'ionicons/icons';
+
 import Workouts from '../pages/Workouts';
-import CreateWorkout from '../pages/CreateWorkout';
 import History from '../pages/History';
+import EditWorkout from '../pages/EditWorkout';
+import CreateWorkout from '../pages/CreateWorkout';
 
 /**
  * This component is the main tab bar for the app. It contains the routes for
@@ -19,15 +25,10 @@ import History from '../pages/History';
 const SignedInTabs = () => (
   <IonTabs>
     <IonRouterOutlet>
-      <Route exact path="/workouts">
-        <Workouts />
-      </Route>
-      <Route path="/createworkout">
-        <CreateWorkout />
-      </Route>
-      <Route path="/workouthistory">
-        <History />
-      </Route>
+      <Route exact path="/workouts" component={Workouts} />
+      <Route exact path="/workoutcreate" component={CreateWorkout} />
+      <Route path="/workout/:id" component={EditWorkout} />
+      <Route exact path="/workouthistory" component={History} />
       <Route exact path="/">
         <Redirect to="/workouts" />
       </Route>
@@ -37,7 +38,7 @@ const SignedInTabs = () => (
         <IonIcon icon={listOutline} />
         <IonLabel>Workouts</IonLabel>
       </IonTabButton>
-      <IonTabButton tab="createworkout" href="/createworkout">
+      <IonTabButton tab="createworkout" href="/workoutcreate">
         <IonIcon icon={addCircleOutline} />
         <IonLabel>Create Workout</IonLabel>
       </IonTabButton>

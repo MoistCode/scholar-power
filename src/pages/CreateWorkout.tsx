@@ -1,15 +1,25 @@
-import { IonContent, IonPage } from '@ionic/react';
-import Header from '../components/Header';
+import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader } from "@ionic/react";
 
-/**
- * This component is the page responsible for creating a new workout.
- */
 const CreateWorkout = () => {
+
+  // TODO: Create the actual workout.
+  // TODO: Show a busy indicator while the backend is working on creating the
+  // workout.
+  // TODO: Show an error message if the backend fails to create the workout.
+  // TODO: Redirect to the workout list page after the workout has been created.
+
   return (
     <IonPage>
-      <Header title="Create Workout" />
-      <IonContent fullscreen>
-        Create workout page example
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Create workout</IonTitle>
+          <IonButtons slot="end">
+            <IonButton color="success">Finish</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        
       </IonContent>
     </IonPage>
   );
