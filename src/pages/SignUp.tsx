@@ -9,8 +9,6 @@ import useFetch from '../hooks/useFetch';
  * This component is the page responsible for signing up.
  */
 
-// TODO: add Ionic alerts for invalid username/password
-
 const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
