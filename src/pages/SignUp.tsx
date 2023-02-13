@@ -1,15 +1,4 @@
-import { 
-  IonButton, 
-  IonButtons, 
-  IonContent, 
-  IonIcon, 
-  IonInput, 
-  IonItem, 
-  IonLabel, 
-  IonList, 
-  IonPage, 
-  IonToolbar
-} from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import { chevronForward } from "ionicons/icons";
 import { useRef } from 'react';
 import Header from '../components/Header';
