@@ -27,7 +27,7 @@ const SignUp = () => {
 
     await signUpUser({
       variables: { username, password },
-      endpoint: '/api/v1/user',
+      endpoint: '/api/v1/register',
       method: 'POST'
     });
   }
