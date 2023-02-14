@@ -8,7 +8,6 @@ import useFetch from '../hooks/useFetch';
 /**
  * This component is the page responsible for signing up.
  */
-
 const SignUp = () => {
   let usernameInputRef = useRef<HTMLIonInputElement>(null);
   let passwordInputRef = useRef<HTMLIonInputElement>(null);
