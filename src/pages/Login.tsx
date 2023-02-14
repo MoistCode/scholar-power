@@ -59,7 +59,6 @@ const Login = () => {
               placeholder="Enter username"
             />
           </IonItem>
-          <p></p>
           <IonItem fill="outline" class="ion-margin-bottom">
             <IonLabel position="floating">Password</IonLabel>
             <IonInput
