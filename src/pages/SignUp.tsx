@@ -55,15 +55,14 @@ const SignUp = () => {
               <p>Register a new account</p>
             </IonLabel>
           </IonItem>
-          <IonItem fill="outline">
+          <IonItem fill="outline" class="ion-margin-bottom">
             <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
               placeholder="Enter username"
             />
           </IonItem>
-          <p></p>
-          <IonItem fill="outline">
+          <IonItem fill="outline" class="ion-margin-bottom">
             <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}

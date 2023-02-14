@@ -52,7 +52,7 @@ const Login = () => {
               <p>Log into an account</p>
             </IonLabel>
           </IonItem>
-          <IonItem fill="outline">
+          <IonItem fill="outline" class="ion-margin-bottom">
             <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
@@ -60,7 +60,7 @@ const Login = () => {
             />
           </IonItem>
           <p></p>
-          <IonItem fill="outline">
+          <IonItem fill="outline" class="ion-margin-bottom">
             <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}
