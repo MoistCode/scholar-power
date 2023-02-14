@@ -1,4 +1,5 @@
 import { IonAlert, IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { chevronForward } from "ionicons/icons";
 import { useEffect, useRef, useState } from 'react';
 
 import Header from '../components/Header';
@@ -45,18 +46,23 @@ const SignUp = () => {
 
   return (
     <IonPage>
-      <Header title="Register a new account" />
+      <Header title="Welcome to Scholar Power!" />
       <IonContent fullscreen>
         <IonList>
           <IonItem>
-            <IonLabel>Username</IonLabel>
+            <IonLabel>
+              <p>Register a new account</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem fill="outline" class="ion-margin-bottom">
+            <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
               placeholder="Enter username"
             />
           </IonItem>
-          <IonItem>
-            <IonLabel>Password</IonLabel>
+          <IonItem fill="outline" class="ion-margin-bottom">
+            <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}
               placeholder="Enter password"
@@ -66,9 +72,9 @@ const SignUp = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline" onClick={onSignUp} disabled={signUpUserLoading}>
-              <IonIcon slot="primary"/>
-              Sign Up
+            <IonButton fill="solid" color="primary" onClick={onSignUp} disabled={signUpUserLoading}>
+              <IonLabel>Sign Up</IonLabel>
+              <IonIcon slot="end" icon={chevronForward}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>

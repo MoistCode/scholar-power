@@ -1,4 +1,5 @@
-import { IonContent, IonList, IonItem, IonPage, IonToolbar, IonLabel, IonInput, IonButtons, IonButton, IonIcon, IonAlert } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, IonAlert } from '@ionic/react';
+import { chevronForward } from "ionicons/icons";
 import { useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
@@ -47,14 +48,19 @@ const Login = () => {
       <IonContent fullscreen>
         <IonList>
           <IonItem>
-            <IonLabel>Username</IonLabel>
+            <IonLabel>
+              <p>Log into an account</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem fill="outline" class="ion-margin-bottom">
+            <IonLabel position="floating">Username</IonLabel>
             <IonInput
               ref={usernameInputRef}
               placeholder="Enter username"
             />
           </IonItem>
-          <IonItem>
-            <IonLabel>Password</IonLabel>
+          <IonItem fill="outline" class="ion-margin-bottom">
+            <IonLabel position="floating">Password</IonLabel>
             <IonInput
               ref={passwordInputRef}
               placeholder="Enter password"
@@ -64,9 +70,9 @@ const Login = () => {
         </IonList>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton fill="outline" onClick={onLogIn} disabled={signInUserLoading}>
-              <IonIcon slot="primary"/>
-              Login
+            <IonButton fill="solid" color="primary" onClick={onLogIn} disabled={signInUserLoading}>
+              <IonLabel>Log In</IonLabel>
+              <IonIcon slot="end" icon={chevronForward}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
