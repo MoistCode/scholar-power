@@ -37,7 +37,7 @@ export default function useFetch() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [token]);
 
   return {
     fetchDataFn,

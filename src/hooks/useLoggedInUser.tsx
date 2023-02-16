@@ -7,11 +7,11 @@ export function useLoggedInUser() {
   if (!userToken) {
     return null;
   }
-  
   // NOT SECURE. THIS SIMPLY DECODES IT. THERE IS NO VERIFICATION HERE.
   let {
     expired_at: expiredAt,
     username,
+    uid,
   } = jwt_decode(userToken) as DecodedToken;
 
   if (new Date() >= new Date(expiredAt)) {
@@ -19,7 +19,7 @@ export function useLoggedInUser() {
     window.location.href = window.location.origin;
   }    
 
-  return { token: userToken, username };
+  return { token: userToken, username, uid };
 }
 
-type DecodedToken = { expired_at: string; username: string };
+type DecodedToken = { uid: string; expired_at: string; username: string };
