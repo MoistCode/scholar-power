@@ -1,10 +1,9 @@
 import { IonText } from "@ionic/react";
-import { useEffect } from "react";
-import { useExerciseOptionsByGroup } from "../hooks/useExerciseOptionsByGroup";
+import { MuscleGroupOptions, useExerciseOptionsByGroup } from "../hooks/useExerciseOptionsByGroup";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import ExerciseOptionListItem from "./ExerciseOptionListItem";
 
-const ExerciseOptionList = (props: any) => {
+const ExerciseOptionList = (props: ExerciseOptionListProps) => {
   const {
     muscleGroup,
     onSelectExercise,
@@ -23,14 +22,14 @@ const ExerciseOptionList = (props: any) => {
 
   return (
     <>
-      {exerciseOptionList?.map((exercise: any) => {
-        const handleOnSelectExercise= () => {
+      {exerciseOptionList?.map((exercise) => {
+        const handleOnSelectExercise = () => {
           onSelectExercise(exercise);
         }
 
         return (
           <ExerciseOptionListItem
-            key={exercise.ID}
+            key={exercise.id}
             exercise={exercise}
             onSelectExercise={handleOnSelectExercise}
           />
@@ -46,3 +45,8 @@ const ExerciseOptionList = (props: any) => {
 };
 
 export default ExerciseOptionList;
+
+type ExerciseOptionListProps = {
+  muscleGroup: MuscleGroupOptions;
+  onSelectExercise: (exercise: ExerciseOptionItem) => void;
+}

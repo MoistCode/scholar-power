@@ -1,7 +1,7 @@
 import { IonModal, IonHeader, IonToolbar, IonButtons, IonButton, IonContent } from "@ionic/react";
 import { useRef } from "react";
 
-const ExerciseDescriptionModal = (props: any) => {
+const ExerciseDescriptionModal = (props: ExerciseDescriptionModalProps) => {
   const {
     triggerId,
     instructions
@@ -9,9 +9,9 @@ const ExerciseDescriptionModal = (props: any) => {
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-  function confirm() {
+  const confirm = () => {
     modal.current?.dismiss('', 'confirm');
-  }
+  };
 
   return (
     <IonModal ref={modal} trigger={triggerId}>
@@ -32,3 +32,8 @@ const ExerciseDescriptionModal = (props: any) => {
 };
 
 export default ExerciseDescriptionModal;
+
+type ExerciseDescriptionModalProps = {
+  triggerId: string;
+  instructions: string;
+};

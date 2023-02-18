@@ -8,7 +8,7 @@ import { useExerciseList } from "../hooks/useExerciseList";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import { AddExerciseModal } from "./CreateWorkout";
 
-const EditWorkout = (props: any) => {
+const EditWorkout = (props: { match: { params : { id: string }}}) => {
   const {
     match,
   } = props;
@@ -16,7 +16,7 @@ const EditWorkout = (props: any) => {
   const { id } = match.params;
 
   const [counter, setCounter] = useState(0);
-  const [listOfExercises, setListOfExercises] = useState<any>();
+  const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
 
   const {
     loading: getAllExercisesLoading,
@@ -32,23 +32,25 @@ const EditWorkout = (props: any) => {
   useEffect(() => {
     if (!exerciseList) return;
 
-    const formattedExerciseList = exerciseList.map((exercise: any, idx: any) => {
-      const formattedExercise = {
-        name: exercise.ExerciseName,
-        instructions: exercise.ExerciseInstructions,
-        id: exercise.ID,
-        load: exercise.Load,
-        reps: exercise.Reps,
-        sets: exercise.Sets,
-      } as any;
-
-      formattedExercise.dataAttribute = getDataAttributeFromExercise(formattedExercise, idx);
-
-      return formattedExercise;
+    const exerciseListWithAttr = exerciseList.map((exercise, idx) => {
+      return {
+        id: exercise.id,
+        name: exercise.exerciseName,
+        instructions: exercise.exerciseInstructions,
+        equipment: exercise.exerciseEquipment,
+        sets: exercise.sets,
+        reps: exercise.reps,
+        load: exercise.load,
+        dataAttribute: getDataAttributeFromExercise({
+          id: exercise.id,
+          name: exercise.name,
+          counter: idx,
+        }),
+      };
     });
 
     if (!listOfExercises) {
-      setListOfExercises(formattedExerciseList);
+      setListOfExercises(exerciseListWithAttr);
     }
   }, [exerciseList, listOfExercises]);
 
@@ -57,11 +59,12 @@ const EditWorkout = (props: any) => {
   const {
     refetchFn: editNewWorkoutPlanFn,
     loading: isEditingWorkoutPlan,
-    data: editdWorkoutPlanResponse,
   } = useEditWorkoutPlan()
 
   const onEditWorkout = useCallback(() => {
-    const variables = [] as any[];
+    const variables: EditWorkoutExerciseItem[] = [];
+
+    if (!listOfExercises) return;
 
     for (const exerciseListItem of listOfExercises) {
       const {
@@ -69,19 +72,19 @@ const EditWorkout = (props: any) => {
         dataAttribute,
       } = exerciseListItem;
 
-      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as any;
-      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as any;
-      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as any;
+      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
 
       variables.push({
-        sets: sets?.value,
-        reps: reps?.value,
-        load: load?.value,
+        sets: sets?.value ? String(sets.value) : '',
+        reps: reps?.value ? String(reps.value) : '',
+        load: load?.value ? String(load.value) : '',
         id,
       })
     }
 
-    editNewWorkoutPlanFn({ planId: id, variables});
+    editNewWorkoutPlanFn({ planId: id, variables });
   }, [editNewWorkoutPlanFn, id, listOfExercises]);
 
   useLoadingAlert({
@@ -89,15 +92,29 @@ const EditWorkout = (props: any) => {
     message: 'Creating workout...',
   })
 
-  const onSelectExercise = useCallback((exercise: any) => {
-    const currentListOfExercises = [...listOfExercises];
+  const onSelectExercise = useCallback((exercise: ExerciseOptionItem) => {
+    const { id, name, instructions, equipment } = exercise;
+
+    let currentListOfExercises: CurrentListOfExercises[] = [];
+
+    if (listOfExercises) {
+      currentListOfExercises = [...listOfExercises];
+    }
 
     currentListOfExercises.push({
-      id: exercise.ID,
-      name: exercise.Name,
-      instructions: exercise.Instructions,
-      dataAttribute: getDataAttributeFromExercise(exercise, counter),
-    })
+      id,
+      name,
+      equipment,
+      instructions,
+      load: '',
+      sets: '',
+      reps: '',
+      dataAttribute: getDataAttributeFromExercise({
+        id,
+        name,
+        counter,
+      }),
+    });
 
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
@@ -123,7 +140,7 @@ const EditWorkout = (props: any) => {
           </IonText>
         }
         <IonList>
-          {listOfExercises?.map((exercise: any, idx: any) => {
+          {listOfExercises?.map((exercise, idx) => {
             const {
               name,
               instructions,
@@ -187,9 +204,29 @@ const EditWorkout = (props: any) => {
 
 export default EditWorkout;
 
-function getDataAttributeFromExercise(exercise: any, counter: any) {
-  let name = exercise.name || exercise.Name;
-  let id = exercise.id || exercise.ID;
+const getDataAttributeFromExercise = (args: getDataAttributeFromExerciseArgs) => {
+  const {
+    id,
+    name,
+    counter,
+  } = args;
 
   return `${name.replace(' ', '-').toLowerCase()}-${counter}-${id}`;
+};
+
+type getDataAttributeFromExerciseArgs = {
+  id: string;
+  name: string;
+  counter: number;
 }
+
+type CurrentListOfExercises = {
+  id: string;
+  name: string;
+  instructions: string;
+  equipment: string;
+  dataAttribute: string;
+  load: string;
+  sets: string;
+  reps: string;
+};

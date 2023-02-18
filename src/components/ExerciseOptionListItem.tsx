@@ -3,18 +3,18 @@ import { informationCircleOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "./ExerciseDescriptionModal";
 import styles from './ExerciseOptionListItem.module.css';
 
-const ExerciseOptionListItem = (props: any) => {
+const ExerciseOptionListItem = (props: ExerciseOptionListItemProps) => {
   const {
     exercise,
     onSelectExercise,
   } = props;
 
   const {
-    ID: id,
-    Name: name,
-    Muscle: muscle,
-    Equipment: equipment,
-    Instructions: instructions,
+    id,
+    name,
+    muscle,
+    equipment,
+    instructions,
   } = exercise;
 
   let triggerId = `open-exercise-option-descripton-modal-${id}`;
@@ -42,7 +42,7 @@ const ExerciseOptionListItem = (props: any) => {
         </IonItem>
       </IonList>
 
-      <IonButton fill="clear" onClick={onSelectExercise}>
+      <IonButton fill="clear" onClick={() => onSelectExercise()}>
         Add to workout
       </IonButton>
 
@@ -55,3 +55,8 @@ const ExerciseOptionListItem = (props: any) => {
 };
 
 export default ExerciseOptionListItem;
+
+type ExerciseOptionListItemProps = {
+  exercise: ExerciseOptionItem;
+  onSelectExercise: () => void;
+}

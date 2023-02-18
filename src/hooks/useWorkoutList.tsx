@@ -3,31 +3,51 @@ import useFetch from "./useFetch";
 import { useLoggedInUser } from "./useLoggedInUser";
 
 export const useWorkoutList = () => {
-  let loggedInUser = useLoggedInUser();
+  let {
+    username,
+    redirectIfNotLoggedIn
+  } = useLoggedInUser();
+
+  redirectIfNotLoggedIn();
 
   const {
     fetchDataFn: getAllWorkouts,
     loading,
     error,
     data,
-  } = useFetch();
+  } = useFetch<WorkoutOptionItemFromAPI[]>();
 
   const getAllWorkoutsFn = useCallback(async () => {
     console.log('Fetching workouts...');
     await getAllWorkouts({
-      endpoint: `/api/v1/workout/user/${loggedInUser?.username}`,
+      endpoint: `/api/v1/workout/user/${username}`,
       method: 'GET',
     });
-  }, [getAllWorkouts, loggedInUser?.username]);
+  }, [getAllWorkouts, username]);
 
   useEffect(() => {
     getAllWorkoutsFn();
   }, [getAllWorkoutsFn])
 
+  let formattedData: WorkoutOptionItem[]|null = null;
+
+  if (data) {
+    formattedData = data
+      .map((workout: WorkoutOptionItemFromAPI) => {
+        return {
+          planId: workout.PlanID,
+          name: workout.Name,
+          createdAt: workout.CreatedAt,
+          editedAt: workout.EditedAt,
+          creatorID: workout.CreatorID,
+        };
+      });
+  }
+
   return {
     refetchFn: getAllWorkoutsFn,
     loading,
     error,
-    data,
+    data: formattedData,
   };
 };

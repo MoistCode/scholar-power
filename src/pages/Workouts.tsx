@@ -34,7 +34,7 @@ const Workouts = () => {
     <IonPage>
       <Header title="Workouts" />
       <IonContent fullscreen>
-        <WorkoutList workouts={listOfWorkouts}/>
+        {listOfWorkouts && <WorkoutList workouts={listOfWorkouts}/>}
         {getAllWorkoutsError &&
           <IonText color="primary">
             <h1>Something went wrong. Please try again later.</h1>

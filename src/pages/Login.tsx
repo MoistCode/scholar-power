@@ -18,7 +18,7 @@ const Login = () => {
     loading: signInUserLoading,
     error: signInUserError,
     data: signInUserData,
-  } = useFetch();
+  } = useFetch<string>();
 
   const onLogIn = async () => {
     let username = usernameInputRef?.current?.value;

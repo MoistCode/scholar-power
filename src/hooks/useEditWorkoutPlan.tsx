@@ -1,15 +1,17 @@
 import { useCallback } from "react";
 import useFetch from "./useFetch";
 
-export const useEditWorkoutPlan = (): any => {
+export const useEditWorkoutPlan = () => {
   const {
     fetchDataFn: editNewWorkoutPlan,
     loading,
     error,
     data,
-  } = useFetch();
+  } = useFetch<EditWorkoutApiResponse>();
 
-  const editNewWorkoutPlanFn = useCallback(async ({planId, variables}: any) => {
+  const editNewWorkoutPlanFn = useCallback(async (args: editNewWorkoutPlanFnArgs) => {
+    const { planId, variables } = args;
+
     await editNewWorkoutPlan({
       endpoint: `/api/v1/workout/${planId}`,
       method: 'PUT',
@@ -24,3 +26,8 @@ export const useEditWorkoutPlan = (): any => {
     data,
   };
 }
+
+type editNewWorkoutPlanFnArgs = {
+  planId: string,
+  variables: EditWorkoutVariables
+};

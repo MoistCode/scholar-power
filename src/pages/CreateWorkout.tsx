@@ -6,33 +6,15 @@ import ExerciseOptionList from "../components/ExerciseOptionList";
 import { useCreateWorkoutPlan } from "../hooks/useCreateWorkoutPlan";
 import { useLoggedInUser } from "../hooks/useLoggedInUser";
 import useLoadingAlert from "../hooks/useLoadingAlert";
-
-const muscleGroups = [
-  "abdominals",
-  "abductors",
-  "adductors",
-  "biceps",
-  "calves",
-  "chest",
-  "forearms",
-  "glutes",
-  "hamstrings",
-  "lats",
-  "lower_back",
-  "middle_back",
-  "neck",
-  "quadriceps",
-  "traps",
-  "triceps",
-];
+import { MuscleGroupOptions, muscleGroups } from '../hooks/useExerciseOptionsByGroup';
 
 const CreateWorkout = () => {
   const workoutNameRef = useRef<HTMLIonInputElement>(null);
 
   const [counter, setCounter] = useState(0);
-  const [listOfExercises, setListOfExercises] = useState<any>([]);
+  const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]>([]);
 
-  let { uid } = useLoggedInUser() || {};
+  let { uid, redirectIfNotLoggedIn } = useLoggedInUser() || {};
 
   // TODO: Redirect to the workout list page after the workout has been created
   // and clear the form.
@@ -45,16 +27,20 @@ const CreateWorkout = () => {
   const {
     refetchFn: createNewWorkoutPlanFn,
     loading: isCreatingWorkoutPlan,
-    data: createdWorkoutPlanResponse,
   } = useCreateWorkoutPlan()
 
   const onCreateNewWorkout = useCallback(() => {
     const workoutName = workoutNameRef.current?.value;
 
-    const variables = {
+    if (!uid) {
+      redirectIfNotLoggedIn();
+      return;
+    }
+
+    const variables: CreateWorkoutVariables = {
       uid,
-      name: workoutName,
-      exercises: [] as any[],
+      name: workoutName ? String(workoutName) : '',
+      exercises: []
     };
 
     for (const exerciseListItem of listOfExercises) {
@@ -63,35 +49,41 @@ const CreateWorkout = () => {
         dataAttribute,
       } = exerciseListItem;
 
-      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as any;
-      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as any;
-      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as any;
+      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
 
       variables.exercises.push({
-        sets: sets?.value || '',
-        reps: reps?.value || '',
-        load: load?.value || '',
+        sets: sets?.value ? String(sets.value) : '',
+        reps: reps?.value ? String(reps.value) : '',
+        load: load?.value ? String(load.value) : '',
         exercise_id: id,
       })
     }
 
     createNewWorkoutPlanFn(variables);
-  }, [createNewWorkoutPlanFn, listOfExercises, uid]);
+  }, [createNewWorkoutPlanFn, listOfExercises, redirectIfNotLoggedIn, uid]);
 
   useLoadingAlert({
     loading: isCreatingWorkoutPlan,
     message: 'Creating workout...',
   });
 
-  const onSelectExercise = useCallback((exercise: any) => {
+  const onSelectExercise = useCallback((exercise: ExerciseOptionItem) => {
+    const { id, name, instructions, equipment } = exercise;
     const currentListOfExercises = [...listOfExercises];
 
     currentListOfExercises.push({
-      id: exercise.ID,
-      name: exercise.Name,
-      instructions: exercise.Instructions,
-      dataAttribute: getDataAttributeFromExercise(exercise, counter),
-    })
+      id,
+      name,
+      equipment,
+      instructions,
+      dataAttribute: getDataAttributeFromExercise({
+        id,
+        name,
+        counter,
+      }),
+    });
 
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
@@ -113,7 +105,7 @@ const CreateWorkout = () => {
             <IonLabel>Workout Name:</IonLabel>
             <IonInput ref={workoutNameRef} placeholder="Enter workout name" />
           </IonItem>
-          {listOfExercises.map((exercise: any, idx: any) => {
+          {listOfExercises.map((exercise, idx: number) => {
             const {
               name,
               instructions,
@@ -174,16 +166,16 @@ const CreateWorkout = () => {
 
 export default CreateWorkout;
 
-export const AddExerciseModal = (props: any) => {
+export const AddExerciseModal = (props: AddExerciseModalProps) => {
   const { triggerId, onSelectExercise } = props;
   
-  const [muscleGroup, setMuscleGroup] = useState<string>();
+  const [muscleGroup, setMuscleGroup] = useState<MuscleGroupOptions>();
 
   const modal = useRef<HTMLIonModalElement>(null);
 
-  function confirm() {
+  const confirm = () => {
     modal.current?.dismiss('', 'confirm');
-  }
+  };
 
   return (
     <IonModal ref={modal} trigger={triggerId}>
@@ -225,11 +217,31 @@ export const AddExerciseModal = (props: any) => {
   );
 };
 
-function getDataAttributeFromExercise(exercise: any, counter: any) {
+const getDataAttributeFromExercise = (args: getDataAttributeFromExerciseArgs) => {
   const {
-    ID,
-    Name,
-  } = exercise;
+    id,
+    name,
+    counter,
+  } = args;
 
-  return `${Name.replace(' ', '-').toLowerCase()}-${counter}-${ID}`;
+  return `${name.replace(' ', '-').toLowerCase()}-${counter}-${id}`;
+};
+
+type getDataAttributeFromExerciseArgs = {
+  id: string;
+  name: string;
+  counter: number;
 }
+
+type CurrentListOfExercises = {
+  id: string;
+  name: string;
+  instructions: string;
+  equipment: string;
+  dataAttribute: string;
+};
+
+type AddExerciseModalProps = {
+  triggerId: string;
+  onSelectExercise: (exercise: ExerciseOptionItem) => void;
+};

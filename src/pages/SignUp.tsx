@@ -20,7 +20,7 @@ const SignUp = () => {
     loading: signUpUserLoading,
     error: signUpUserError,
     data: signUpUserData,
-  } = useFetch();
+  } = useFetch<string>();
 
   const onSignUp = async () => {
     let username = usernameInputRef?.current?.value;

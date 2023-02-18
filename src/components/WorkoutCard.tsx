@@ -5,16 +5,16 @@ import { useState } from "react";
 
 import styles from './WorkoutCard.module.css';
 
-const WorkoutCard = (props: any) => {
+const WorkoutCard = (props: WorkoutCardProps) => {
   const {
     workout,
   } = props;
 
   const {
-    PlanID: planId,
-    Name: name,
-    CreatedAt: createdAt,
-    EditedAt: editedAt,
+    planId,
+    name,
+    createdAt,
+    editedAt,
   } = workout;
 
   const [present] = useIonActionSheet();
@@ -66,3 +66,7 @@ const WorkoutCard = (props: any) => {
 };
 
 export default WorkoutCard;
+
+type WorkoutCardProps = {
+  workout: WorkoutOptionItem;
+};
