@@ -1,5 +1,6 @@
 import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonList } from "@ionic/react";
 import { informationCircleOutline } from "ionicons/icons";
+import { useRef } from "react";
 import ExerciseDescriptionModal from "./ExerciseDescriptionModal";
 import styles from './ExerciseOptionListItem.module.css';
 
@@ -7,6 +8,7 @@ const ExerciseOptionListItem = (props: ExerciseOptionListItemProps) => {
   const {
     exercise,
     onSelectExercise,
+    dismissOptionList,
   } = props;
 
   const {
@@ -42,7 +44,13 @@ const ExerciseOptionListItem = (props: ExerciseOptionListItemProps) => {
         </IonItem>
       </IonList>
 
-      <IonButton fill="clear" onClick={() => onSelectExercise()}>
+      <IonButton
+        fill="clear"
+        onClick={() => {
+          onSelectExercise();
+          dismissOptionList();
+        }}
+      >
         Add to workout
       </IonButton>
 
@@ -59,4 +67,5 @@ export default ExerciseOptionListItem;
 type ExerciseOptionListItemProps = {
   exercise: ExerciseOptionItem;
   onSelectExercise: () => void;
+  dismissOptionList: () => void;
 }

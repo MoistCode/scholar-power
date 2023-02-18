@@ -1,5 +1,5 @@
 import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption } from "@ionic/react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { informationCircleOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import ExerciseOptionList from "../components/ExerciseOptionList";
@@ -27,6 +27,7 @@ const CreateWorkout = () => {
   const {
     refetchFn: createNewWorkoutPlanFn,
     loading: isCreatingWorkoutPlan,
+    data: createdWorkoutPlanData,
   } = useCreateWorkoutPlan()
 
   const onCreateNewWorkout = useCallback(() => {
@@ -88,6 +89,14 @@ const CreateWorkout = () => {
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
   }, [counter, listOfExercises])
+
+  useEffect(() => {
+    if (createdWorkoutPlanData?.Message === 'workout created') {
+      setListOfExercises([]);
+      // @ts-expect-error Should exist here.
+      workoutNameRef.current.value = '';
+    }
+  }, [createdWorkoutPlanData?.Message])
 
   return (
     <IonPage>
@@ -210,6 +219,7 @@ export const AddExerciseModal = (props: AddExerciseModalProps) => {
           <ExerciseOptionList
             muscleGroup={muscleGroup}
             onSelectExercise={onSelectExercise}
+            dismissOptionList={confirm}
           />
         }
       </IonContent>

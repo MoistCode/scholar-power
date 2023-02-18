@@ -7,6 +7,7 @@ const ExerciseOptionList = (props: ExerciseOptionListProps) => {
   const {
     muscleGroup,
     onSelectExercise,
+    dismissOptionList,
   } = props;
 
   const {
@@ -32,6 +33,7 @@ const ExerciseOptionList = (props: ExerciseOptionListProps) => {
             key={exercise.id}
             exercise={exercise}
             onSelectExercise={handleOnSelectExercise}
+            dismissOptionList={dismissOptionList}
           />
         );
       })}
@@ -49,4 +51,5 @@ export default ExerciseOptionList;
 type ExerciseOptionListProps = {
   muscleGroup: MuscleGroupOptions;
   onSelectExercise: (exercise: ExerciseOptionItem) => void;
+  dismissOptionList: () => void;
 }
