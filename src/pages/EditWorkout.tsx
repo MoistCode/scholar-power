@@ -54,7 +54,7 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
     }
   }, [exerciseList, listOfExercises]);
 
-  const triggerId = 'open-add-exercise-modal';
+  const triggerId = 'open-add-exercise-modal-for-editing';
 
   const {
     refetchFn: editNewWorkoutPlanFn,

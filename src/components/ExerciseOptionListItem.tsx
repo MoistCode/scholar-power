@@ -1,6 +1,5 @@
 import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonList } from "@ionic/react";
 import { informationCircleOutline } from "ionicons/icons";
-import { useRef } from "react";
 import ExerciseDescriptionModal from "./ExerciseDescriptionModal";
 import styles from './ExerciseOptionListItem.module.css';
 
