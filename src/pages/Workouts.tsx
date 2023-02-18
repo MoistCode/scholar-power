@@ -15,6 +15,7 @@ import { useWorkoutList } from '../hooks/useWorkoutList';
  */
 const Workouts = () => {
   const {
+    refetchFn: getAllWorkouts,
     loading: getAllWorkoutsLoading,
     error: getAllWorkoutsError,
     data: listOfWorkouts,
@@ -33,6 +34,10 @@ const Workouts = () => {
       dismiss();
     }
   }, [dismiss, getAllWorkoutsLoading, present]);
+
+  useEffect(() => {
+    getAllWorkouts();
+  }, [getAllWorkouts]);
 
 
   return (
