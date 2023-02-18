@@ -25,8 +25,8 @@ const WorkoutCard = (props: WorkoutCardProps) => {
     <IonCard>
       <IonCardHeader>
         <IonCardTitle>{name}</IonCardTitle>
-        <IonCardSubtitle>Creation Date: {createdAt}</IonCardSubtitle>
-        <IonCardSubtitle>Last Edited: {editedAt}</IonCardSubtitle>
+        <IonCardSubtitle>Creation Date: {String(new Date(createdAt))}</IonCardSubtitle>
+        <IonCardSubtitle>Last Edited: {String(new Date(editedAt))}</IonCardSubtitle>
       </IonCardHeader>
 
       <div className={styles.createButtonContainer}>
