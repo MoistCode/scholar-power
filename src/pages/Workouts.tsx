@@ -1,12 +1,12 @@
 import {
   IonContent,
   IonPage,
-  useIonLoading,
   IonText,
 } from '@ionic/react';
 import { useEffect } from 'react';
 import Header from '../components/Header';
 import WorkoutList from '../components/WorkoutList';
+import useLoadingAlert from '../hooks/useLoadingAlert';
 import { useWorkoutList } from '../hooks/useWorkoutList';
 
 /**
@@ -21,24 +21,14 @@ const Workouts = () => {
     data: listOfWorkouts,
   } = useWorkoutList();
 
-  const [present, dismiss] = useIonLoading();
-
-  useEffect(() => {
-    if (getAllWorkoutsLoading) {
-      present({
-        message: 'Loading workouts...',
-      });
-    }
-
-    if (!getAllWorkoutsLoading) {
-      dismiss();
-    }
-  }, [dismiss, getAllWorkoutsLoading, present]);
+  useLoadingAlert({
+    loading: getAllWorkoutsLoading,
+    message: 'Loading workout...',
+  });
 
   useEffect(() => {
     getAllWorkouts();
   }, [getAllWorkouts]);
-
 
   return (
     <IonPage>

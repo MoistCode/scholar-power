@@ -51,5 +51,5 @@ export default function useFetch() {
 type FetchProps = {
   variables?: object;
   endpoint: string;
-  method: 'GET'|'POST';
+  method: 'GET'|'POST'|'PUT';
 };

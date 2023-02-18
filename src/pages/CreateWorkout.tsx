@@ -1,10 +1,11 @@
-import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption, useIonLoading } from "@ionic/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption } from "@ionic/react";
+import { useCallback, useRef, useState } from "react";
 import { informationCircleOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import ExerciseOptionList from "../components/ExerciseOptionList";
 import { useCreateWorkoutPlan } from "../hooks/useCreateWorkoutPlan";
 import { useLoggedInUser } from "../hooks/useLoggedInUser";
+import useLoadingAlert from "../hooks/useLoadingAlert";
 
 const muscleGroups = [
   "abdominals",
@@ -47,8 +48,6 @@ const CreateWorkout = () => {
     data: createdWorkoutPlanResponse,
   } = useCreateWorkoutPlan()
 
-  const [present, dismiss] = useIonLoading();
-
   const onCreateNewWorkout = useCallback(() => {
     const workoutName = workoutNameRef.current?.value;
 
@@ -69,9 +68,9 @@ const CreateWorkout = () => {
       const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as any;
 
       variables.exercises.push({
-        sets: sets?.value,
-        reps: reps?.value,
-        load: load?.value,
+        sets: sets?.value || '',
+        reps: reps?.value || '',
+        load: load?.value || '',
         exercise_id: id,
       })
     }
@@ -79,18 +78,10 @@ const CreateWorkout = () => {
     createNewWorkoutPlanFn(variables);
   }, [createNewWorkoutPlanFn, listOfExercises, uid]);
 
-
-  useEffect(() => {
-    if (isCreatingWorkoutPlan) {
-      present({
-        message: 'Creating workout...',
-      });
-    }
-
-    if (!isCreatingWorkoutPlan) {
-      dismiss();
-    }
-  }, [dismiss, isCreatingWorkoutPlan, present]);
+  useLoadingAlert({
+    loading: isCreatingWorkoutPlan,
+    message: 'Creating workout...',
+  });
 
   const onSelectExercise = useCallback((exercise: any) => {
     const currentListOfExercises = [...listOfExercises];
@@ -183,7 +174,7 @@ const CreateWorkout = () => {
 
 export default CreateWorkout;
 
-const AddExerciseModal = (props: any) => {
+export const AddExerciseModal = (props: any) => {
   const { triggerId, onSelectExercise } = props;
   
   const [muscleGroup, setMuscleGroup] = useState<string>();

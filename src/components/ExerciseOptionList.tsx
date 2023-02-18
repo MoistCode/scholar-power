@@ -1,6 +1,7 @@
-import { IonText, useIonLoading } from "@ionic/react";
+import { IonText } from "@ionic/react";
 import { useEffect } from "react";
 import { useExerciseOptionsByGroup } from "../hooks/useExerciseOptionsByGroup";
+import useLoadingAlert from "../hooks/useLoadingAlert";
 import ExerciseOptionListItem from "./ExerciseOptionListItem";
 
 const ExerciseOptionList = (props: any) => {
@@ -9,25 +10,16 @@ const ExerciseOptionList = (props: any) => {
     onSelectExercise,
   } = props;
 
-  const [present, dismiss] = useIonLoading();
-
   const {
     loading: getAllExerciseOptionsByGroupLoading,
     error: getAllExerciseOptionsByGroupError,
     data: exerciseOptionList
   } = useExerciseOptionsByGroup(muscleGroup)
 
-  useEffect(() => {
-    if (getAllExerciseOptionsByGroupLoading) {
-      present({
-        message: 'Loading exercises...',
-      });
-    }
-
-    if (!getAllExerciseOptionsByGroupLoading) {
-      dismiss();
-    }
-  }, [dismiss, getAllExerciseOptionsByGroupLoading, present]);
+  useLoadingAlert({
+    loading: getAllExerciseOptionsByGroupLoading,
+    message: 'Loading exercises...',
+  });
 
   return (
     <>

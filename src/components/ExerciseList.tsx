@@ -1,6 +1,6 @@
-import { IonText, useIonLoading } from "@ionic/react";
-import { useEffect } from "react";
+import { IonText } from "@ionic/react";
 import { useExerciseList } from "../hooks/useExerciseList";
+import useLoadingAlert from "../hooks/useLoadingAlert";
 import ExerciseCard from "./ExerciseCard";
 
 const ExerciseList = (props: any) => {
@@ -8,25 +8,16 @@ const ExerciseList = (props: any) => {
     planId
   } = props;
 
-  const [present, dismiss] = useIonLoading();
-
   const {
     loading: getAllExercisesLoading,
     error: getAllExercisesError,
     data: exerciseList
-  } = useExerciseList({ planId })
+  } = useExerciseList({ planId });
 
-  useEffect(() => {
-    if (getAllExercisesLoading) {
-      present({
-        message: 'Loading workouts...',
-      });
-    }
-
-    if (!getAllExercisesLoading) {
-      dismiss();
-    }
-  }, [dismiss, getAllExercisesLoading, present]);
+  useLoadingAlert({
+    loading: getAllExercisesLoading,
+    message: 'Loading workouts...',
+  })
 
   return (
     <>
