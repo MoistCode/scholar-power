@@ -23,7 +23,7 @@ import ActivateWorkout from '../pages/ActivateWorkout';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { endWorkout } from '../slices/activatedWorkout';
 
 /**
@@ -59,10 +59,12 @@ const SignedInTabs = () => {
     })
   };
 
-  if (result?.data?.action === 'cancelworkout') {
-    setResult(undefined);
-    dispatch(endWorkout());
-  }
+  useEffect(() => {
+    if (result?.data?.action === 'cancelworkout') {
+      setResult(undefined);
+      dispatch(endWorkout());
+    }
+  }, [result?.data?.action, dispatch])
 
   return (
     <IonTabs>
@@ -82,13 +84,15 @@ const SignedInTabs = () => {
         />
         <Route exact path="/workout/:id" component={EditWorkout} />
         <Route exact path="/workouthistory" component={History} />
-        <Route render={() => {
-          if (hasActivatedWorkout) {
-            return <Redirect to={`/workout/${activatedWorkoutId}/activate`} />;
-          }
+        <Route
+          render={(props) => {
+            let url = hasActivatedWorkout
+              ? `/workoutactivate/${activatedWorkoutId}`
+              : '/workouts';
 
-          return <Redirect to="/workouts" />;
-        }} />
+            return <Redirect to={url} />;
+          }}
+        />
       </IonRouterOutlet>
     
       {hasActivatedWorkout

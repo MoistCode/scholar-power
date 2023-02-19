@@ -1,16 +1,18 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router";
 import { useExerciseList } from "../hooks/useExerciseList";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import { endWorkout } from "../slices/activatedWorkout";
+import { RootState } from "../store";
 
 const ActivateWorkout = (props: { match: { url: string }}) => {
   const { match } = props;
 
   // TODO: This is a hacky way to get the ID of the workout. We should
   // probably use a different method. For some reason the ID is not being
-  // matched on the URl. Jacob, don't worry about this TODO. I'll fix it.
+  // matched on the URL. Jacob, don't worry about this TODO. I'll fix it.
   const urlParts = match.url.split('/');
   const id = urlParts[2];
 
@@ -18,7 +20,7 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
     loading: getAllExercisesLoading,
     // TODO: Do something with this error. Maybe show a modal that lets the user
     // know that something went wrong with a button that refreshes the page?
-    error: getAllExercisesError,
+    // error: getAllExercisesError,
     data: exerciseList
   } = useExerciseList({ planId: id })
 
@@ -53,6 +55,8 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
   }, [exerciseList, getAllExercisesLoading, listOfExercises]);
 
   const dispatch = useDispatch();
+  const hasActivatedWorkout = useSelector((state: RootState) => state.activatedWorkout.hasActivatedWorkout);
+
 
   const onCompleteWorkout = () => {
     // TODO: Add logic to complete workout. Perhaps we can show a modal that
@@ -61,6 +65,10 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
     console.log('Completed workout, yay!');
     dispatch(endWorkout());
   };
+
+  if (!hasActivatedWorkout) {
+    return <Redirect to="/workouts" />;
+  }
 
   return (
     <IonPage>
