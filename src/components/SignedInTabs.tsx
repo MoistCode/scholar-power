@@ -27,11 +27,9 @@ const SignedInTabs = () => (
     <IonRouterOutlet>
       <Route exact path="/workouts" component={Workouts} />
       <Route exact path="/workoutcreate" component={CreateWorkout} />
-      <Route path="/workout/:id" component={EditWorkout} />
+      <Route exact path="/workout/:id" component={EditWorkout} />
       <Route exact path="/workouthistory" component={History} />
-      <Route exact path="/">
-        <Redirect to="/workouts" />
-      </Route>
+      <Route render={() => <Redirect to="/workouts" />} />
     </IonRouterOutlet>
     <IonTabBar slot="bottom">
       <IonTabButton tab="workouts" href="/workouts">
