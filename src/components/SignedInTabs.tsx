@@ -71,7 +71,7 @@ const SignedInTabs = () => {
         <Route exact path="/workoutcreate" component={CreateWorkout} />
         <Route
           exact
-          path="/workout/:id/activate"
+          path="/workoutactivate/:id"
           render={(props) => {
             if (hasActivatedWorkout) {
               return <ActivateWorkout {...props}/>;

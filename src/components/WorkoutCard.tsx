@@ -26,7 +26,7 @@ const WorkoutCard = (props: WorkoutCardProps) => {
 
   if (result?.data?.action === 'startworkout') {
     dispatch(startWorkout(planId));
-    return <Redirect to={`/workout/${planId}/activate`} />;
+    return <Redirect to={`/workoutactivate/${planId}`} />;
   }
 
   return (

@@ -5,10 +5,14 @@ import { useExerciseList } from "../hooks/useExerciseList";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import { endWorkout } from "../slices/activatedWorkout";
 
-const ActivateWorkout = (props: { match: { params : { id: string }}}) => {
+const ActivateWorkout = (props: { match: { url: string }}) => {
   const { match } = props;
 
-  const { id } = match.params;
+  // TODO: This is a hacky way to get the ID of the workout. We should
+  // probably use a different method. For some reason the ID is not being
+  // matched on the URl. Jacob, don't worry about this TODO. I'll fix it.
+  const urlParts = match.url.split('/');
+  const id = urlParts[2];
 
   const {
     loading: getAllExercisesLoading,
