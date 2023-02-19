@@ -23,17 +23,10 @@ export const useLoggedInUser = () => {
   }
   // NOT SECURE. THIS SIMPLY DECODES IT. THERE IS NO VERIFICATION HERE.
 
-  const redirectIfNotLoggedIn = () => {
-    if (!username || !userToken || !uid) {
-      window.location.href = window.location.origin;
-    }
-  };
-
   return {
     token: userToken,
     username,
     uid,
-    redirectIfNotLoggedIn,
   };
 };
 

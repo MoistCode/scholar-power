@@ -7,6 +7,9 @@ import { useEditWorkoutPlan } from "../hooks/useEditWorkoutPlan";
 import { useExerciseList } from "../hooks/useExerciseList";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import { AddExerciseModal } from "./CreateWorkout";
+import { Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { refetchWorkouts } from "../slices/refetch";
 
 const EditWorkout = (props: { match: { params : { id: string }}}) => {
   const {
@@ -14,7 +17,6 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
   } = props;
 
   const { id } = match.params;
-
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
 
@@ -27,10 +29,10 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
   useLoadingAlert({
     loading: getAllExercisesLoading,
     message: 'Loading workouts...',
-  })
+  });
 
   useEffect(() => {
-    if (!exerciseList) return;
+    if (!exerciseList || getAllExercisesLoading || listOfExercises) return;
 
     const exerciseListWithAttr = exerciseList.map((exercise, idx) => {
       return {
@@ -49,16 +51,15 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
       };
     });
 
-    if (!listOfExercises) {
-      setListOfExercises(exerciseListWithAttr);
-    }
-  }, [exerciseList, listOfExercises]);
+    setListOfExercises(exerciseListWithAttr);
+  }, [exerciseList, getAllExercisesLoading, listOfExercises]);
 
   const triggerId = 'open-add-exercise-modal-for-editing';
 
   const {
     refetchFn: editNewWorkoutPlanFn,
     loading: isEditingWorkoutPlan,
+    data: editNewWorkoutPlanData,
   } = useEditWorkoutPlan()
 
   const onEditWorkout = useCallback(() => {
@@ -86,6 +87,8 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
 
     editNewWorkoutPlanFn({ planId: id, variables });
   }, [editNewWorkoutPlanFn, id, listOfExercises]);
+
+  const dispatch = useDispatch();
 
   useLoadingAlert({
     loading: isEditingWorkoutPlan,
@@ -119,6 +122,11 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
   }, [counter, listOfExercises])
+
+  if (editNewWorkoutPlanData?.Message === 'workout updated') {
+    dispatch(refetchWorkouts());
+    return <Redirect to="/workouts" />;
+  }
 
   return (
     <IonPage>

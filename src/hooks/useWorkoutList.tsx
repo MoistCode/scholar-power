@@ -5,10 +5,7 @@ import { useLoggedInUser } from "./useLoggedInUser";
 export const useWorkoutList = () => {
   let {
     username,
-    redirectIfNotLoggedIn
   } = useLoggedInUser();
-
-  redirectIfNotLoggedIn();
 
   const {
     fetchDataFn: getAllWorkouts,
@@ -18,7 +15,6 @@ export const useWorkoutList = () => {
   } = useFetch<WorkoutOptionItemFromAPI[]>();
 
   const getAllWorkoutsFn = useCallback(async () => {
-    console.log('Fetching workouts...');
     await getAllWorkouts({
       endpoint: `/api/v1/workout/user/${username}`,
       method: 'GET',

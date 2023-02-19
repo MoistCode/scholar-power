@@ -7,6 +7,7 @@ export const useCreateWorkoutPlan = () => {
     loading,
     error,
     data,
+    reset,
   } = useFetch<CreateWorkoutApiResponse>();
 
   const createNewWorkoutPlanFn = useCallback(async (variables: CreateWorkoutVariables) => {
@@ -22,5 +23,6 @@ export const useCreateWorkoutPlan = () => {
     loading,
     error,
     data,
+    reset,
   };
 }

@@ -41,12 +41,19 @@ export default function useFetch<DataReturnType>() {
     }
   }, [token]);
 
+  const reset = () => {
+    setLoading(false);
+    setError(null);
+    setData(null);
+  };
+
   return {
     fetchDataFn,
     clearError: () => setError(null),
     loading,
     error,
     data,
+    reset,
   };
 }
 

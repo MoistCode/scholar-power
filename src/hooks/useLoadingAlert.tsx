@@ -1,5 +1,5 @@
 import { useIonLoading } from "@ionic/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useLoadingAlert = (props: LoadingAlertProps) => {
   const {
@@ -7,20 +7,27 @@ const useLoadingAlert = (props: LoadingAlertProps) => {
     message
   } = props;
 
+  const [isPresenting, setIsPresenting] = useState(false);
+
   const [present, dismiss] = useIonLoading();
 
   useEffect(() => {
-    if (loading) {
+    if (loading && !isPresenting) {
+      setIsPresenting(true);
       present({
         message,
       });
-    }
+    }  
+  }, [isPresenting, loading, message, present]);
 
-    if (!loading) {
+  useEffect(() => {
+    if (!loading && isPresenting) {
+      setIsPresenting(false);
       dismiss();
     }
-  }, [dismiss, loading, message, present]);
+  }, [dismiss, isPresenting, loading])
 };
+
 
 export default useLoadingAlert;
 

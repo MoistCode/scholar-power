@@ -3,11 +3,14 @@ import {
   IonPage,
   IonText,
 } from '@ionic/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import WorkoutList from '../components/WorkoutList';
 import useLoadingAlert from '../hooks/useLoadingAlert';
 import { useWorkoutList } from '../hooks/useWorkoutList';
+import { disableRefetchWorkouts } from '../slices/refetch';
+import { RootState } from '../store';
 
 /**
  * This component is the page responsible for displaying the user-generated
@@ -21,14 +24,39 @@ const Workouts = () => {
     data: listOfWorkouts,
   } = useWorkoutList();
 
+  const dispatch = useDispatch();
+
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
   useLoadingAlert({
     loading: getAllWorkoutsLoading,
     message: 'Loading workout...',
   });
 
+  const shouldRefetchWorkouts = useSelector((state: RootState) => state.refetch.shouldRefetchWorkouts)
+
   useEffect(() => {
-    getAllWorkouts();
-  }, [getAllWorkouts]);
+    if (isInitialRender && shouldRefetchWorkouts) {
+      getAllWorkouts();
+      setIsInitialRender(false);
+      dispatch(disableRefetchWorkouts());
+      return;
+    }
+
+    if (isInitialRender) {
+      getAllWorkouts();
+      setIsInitialRender(false);
+      return;
+    }
+
+    if (shouldRefetchWorkouts) {
+      getAllWorkouts();
+      dispatch(disableRefetchWorkouts());
+      return;
+    }
+  }, [dispatch, getAllWorkouts, isInitialRender, shouldRefetchWorkouts]);
+
+
 
   return (
     <IonPage>

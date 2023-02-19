@@ -7,6 +7,9 @@ import { useCreateWorkoutPlan } from "../hooks/useCreateWorkoutPlan";
 import { useLoggedInUser } from "../hooks/useLoggedInUser";
 import useLoadingAlert from "../hooks/useLoadingAlert";
 import { MuscleGroupOptions, muscleGroups } from '../hooks/useExerciseOptionsByGroup';
+import { refetchWorkouts } from "../slices/refetch";
+import { useDispatch } from "react-redux";
+import { Redirect } from "react-router";
 
 const CreateWorkout = () => {
   const workoutNameRef = useRef<HTMLIonInputElement>(null);
@@ -14,7 +17,7 @@ const CreateWorkout = () => {
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]>([]);
 
-  let { uid, redirectIfNotLoggedIn } = useLoggedInUser() || {};
+  let { uid } = useLoggedInUser() || {};
 
   // TODO: Redirect to the workout list page after the workout has been created
   // and clear the form.
@@ -24,17 +27,19 @@ const CreateWorkout = () => {
 
   const triggerId = 'open-add-exercise-modal';
 
+  const dispatch = useDispatch();
+
   const {
     refetchFn: createNewWorkoutPlanFn,
     loading: isCreatingWorkoutPlan,
     data: createdWorkoutPlanData,
+    reset: resetCreateWorkoutPlanData,
   } = useCreateWorkoutPlan()
 
   const onCreateNewWorkout = useCallback(() => {
     const workoutName = workoutNameRef.current?.value;
 
     if (!uid) {
-      redirectIfNotLoggedIn();
       return;
     }
 
@@ -63,7 +68,7 @@ const CreateWorkout = () => {
     }
 
     createNewWorkoutPlanFn(variables);
-  }, [createNewWorkoutPlanFn, listOfExercises, redirectIfNotLoggedIn, uid]);
+  }, [createNewWorkoutPlanFn, listOfExercises, uid]);
 
   useLoadingAlert({
     loading: isCreatingWorkoutPlan,
@@ -92,11 +97,14 @@ const CreateWorkout = () => {
 
   useEffect(() => {
     if (createdWorkoutPlanData?.Message === 'workout created') {
-      setListOfExercises([]);
-      // @ts-expect-error Should exist here.
-      workoutNameRef.current.value = '';
+      resetCreateWorkoutPlanData();
+      dispatch(refetchWorkouts());
     }
-  }, [createdWorkoutPlanData?.Message])
+  }, [createdWorkoutPlanData?.Message, dispatch, resetCreateWorkoutPlanData])
+
+  if (createdWorkoutPlanData?.Message === 'workout created') {
+    return <Redirect to="/workouts" />;
+  }
 
   return (
     <IonPage>

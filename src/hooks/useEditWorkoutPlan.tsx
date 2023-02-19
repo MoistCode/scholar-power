@@ -7,6 +7,7 @@ export const useEditWorkoutPlan = () => {
     loading,
     error,
     data,
+    reset,
   } = useFetch<EditWorkoutApiResponse>();
 
   const editNewWorkoutPlanFn = useCallback(async (args: editNewWorkoutPlanFnArgs) => {
@@ -24,6 +25,7 @@ export const useEditWorkoutPlan = () => {
     loading,
     error,
     data,
+    reset,
   };
 }
 
