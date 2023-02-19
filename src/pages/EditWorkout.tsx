@@ -11,12 +11,17 @@ import { Redirect } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { refetchWorkouts } from "../slices/refetch";
 
-const EditWorkout = (props: { match: { params : { id: string }}}) => {
+const EditWorkout = (props: { match: { url: string }}) => {
   const {
     match,
   } = props;
 
-  const { id } = match.params;
+  // TODO: This is a hacky way to get the ID of the workout. We should
+  // probably use a different method. For some reason the ID is not being
+  // matched on the URL.
+  const urlParts = match.url.split('/');
+  const id = urlParts[2];
+
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
 
