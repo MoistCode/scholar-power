@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import refetchReducer from './slices/refetch';
+import activatedWorkoutReducer from './slices/activatedWorkout';
 
 export const store = configureStore({
   reducer: {
-    refetch: refetchReducer
+    refetch: refetchReducer,
+    activatedWorkout: activatedWorkoutReducer,
   },
 })
 

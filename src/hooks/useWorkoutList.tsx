@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import useFetch from "./useFetch";
 import { useLoggedInUser } from "./useLoggedInUser";
 
@@ -20,10 +20,6 @@ export const useWorkoutList = () => {
       method: 'GET',
     });
   }, [getAllWorkouts, username]);
-
-  useEffect(() => {
-    getAllWorkoutsFn();
-  }, [getAllWorkoutsFn])
 
   let formattedData: WorkoutOptionItem[]|null = null;
 

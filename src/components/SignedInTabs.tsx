@@ -6,46 +6,119 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  useIonActionSheet,
 } from '@ionic/react';
 import {
   addCircleOutline,
   newspaperOutline,
   listOutline,
+  banOutline,
 } from 'ionicons/icons';
 
 import Workouts from '../pages/Workouts';
 import History from '../pages/History';
 import EditWorkout from '../pages/EditWorkout';
 import CreateWorkout from '../pages/CreateWorkout';
+import ActivateWorkout from '../pages/ActivateWorkout';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { useState } from 'react';
+import { endWorkout } from '../slices/activatedWorkout';
 
 /**
  * This component is the main tab bar for the app. It contains the routes for
  * the main pages of the app when the user is signed in.
  */
-const SignedInTabs = () => (
-  <IonTabs>
-    <IonRouterOutlet>
-      <Route exact path="/workouts" component={Workouts} />
-      <Route exact path="/workoutcreate" component={CreateWorkout} />
-      <Route exact path="/workout/:id" component={EditWorkout} />
-      <Route exact path="/workouthistory" component={History} />
-      <Route render={() => <Redirect to="/workouts" />} />
-    </IonRouterOutlet>
-    <IonTabBar slot="bottom">
-      <IonTabButton tab="workouts" href="/workouts">
-        <IonIcon icon={listOutline} />
-        <IonLabel>Workouts</IonLabel>
-      </IonTabButton>
-      <IonTabButton tab="createworkout" href="/workoutcreate">
-        <IonIcon icon={addCircleOutline} />
-        <IonLabel>Create Workout</IonLabel>
-      </IonTabButton>
-      <IonTabButton tab="workouthistory" href="/workouthistory">
-        <IonIcon icon={newspaperOutline} />
-        <IonLabel>History</IonLabel>
-      </IonTabButton>
-    </IonTabBar>
-  </IonTabs>
-);
+const SignedInTabs = () => {
+  const hasActivatedWorkout = useSelector((state: RootState) => state.activatedWorkout.hasActivatedWorkout);
+  const activatedWorkoutId = useSelector((state: RootState) => state.activatedWorkout.activatedWorkoutId);
+  const [present] = useIonActionSheet();
+  const [result, setResult] = useState<OverlayEventDetail>();
+  const dispatch = useDispatch();
+
+  const handleCancelWorkout = () => {
+    present({
+      header: 'Cancel this workout?',
+      buttons: [
+        {
+          text: 'Yes',
+          data: {
+            action: 'cancelworkout',
+          },
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+      onDidDismiss: ({ detail }) => setResult(detail),
+    })
+  };
+
+  if (result?.data?.action === 'cancelworkout') {
+    setResult(undefined);
+    dispatch(endWorkout());
+  }
+
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        <Route exact path="/workouts" component={Workouts} />
+        <Route exact path="/workoutcreate" component={CreateWorkout} />
+        <Route
+          exact
+          path="/workout/:id/activate"
+          render={(props) => {
+            if (hasActivatedWorkout) {
+              return <ActivateWorkout {...props}/>;
+            }
+
+            return <Redirect to="/workouts" />;
+          }}
+        />
+        <Route exact path="/workout/:id" component={EditWorkout} />
+        <Route exact path="/workouthistory" component={History} />
+        <Route render={() => {
+          if (hasActivatedWorkout) {
+            return <Redirect to={`/workout/${activatedWorkoutId}/activate`} />;
+          }
+
+          return <Redirect to="/workouts" />;
+        }} />
+      </IonRouterOutlet>
+    
+      {hasActivatedWorkout
+        ? (
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="workouts" onClick={handleCancelWorkout}>
+              <IonIcon icon={banOutline} />
+              <IonLabel>Cancel</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        )
+        : (
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="workouts" href="/workouts">
+              <IonIcon icon={listOutline} />
+              <IonLabel>Workouts</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="createworkout" href="/workoutcreate">
+              <IonIcon icon={addCircleOutline} />
+              <IonLabel>Create Workout</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="workouthistory" href="/workouthistory">
+              <IonIcon icon={newspaperOutline} />
+              <IonLabel>History</IonLabel>
+            </IonTabButton>
+            </IonTabBar>
+        )
+      }
+    </IonTabs>
+  );
+};
 
 export default SignedInTabs;

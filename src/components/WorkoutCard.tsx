@@ -2,6 +2,9 @@ import { IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIc
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { createOutline, playOutline } from "ionicons/icons";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Redirect } from "react-router";
+import { startWorkout } from "../slices/activatedWorkout";
 
 import styles from './WorkoutCard.module.css';
 
@@ -18,8 +21,13 @@ const WorkoutCard = (props: WorkoutCardProps) => {
   } = workout;
 
   const [present] = useIonActionSheet();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<OverlayEventDetail>();
+  const dispatch = useDispatch();
+
+  if (result?.data?.action === 'startworkout') {
+    dispatch(startWorkout(planId));
+    return <Redirect to={`/workout/${planId}/activate`} />;
+  }
 
   return (
     <IonCard>

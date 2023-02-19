@@ -63,6 +63,8 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
   } = useEditWorkoutPlan()
 
   const onEditWorkout = useCallback(() => {
+    if (isEditingWorkoutPlan) return;
+
     const variables: EditWorkoutExerciseItem[] = [];
 
     if (!listOfExercises) return;
@@ -86,7 +88,7 @@ const EditWorkout = (props: { match: { params : { id: string }}}) => {
     }
 
     editNewWorkoutPlanFn({ planId: id, variables });
-  }, [editNewWorkoutPlanFn, id, listOfExercises]);
+  }, [editNewWorkoutPlanFn, id, isEditingWorkoutPlan, listOfExercises]);
 
   const dispatch = useDispatch();
 

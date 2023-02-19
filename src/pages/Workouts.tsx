@@ -33,9 +33,14 @@ const Workouts = () => {
     message: 'Loading workout...',
   });
 
-  const shouldRefetchWorkouts = useSelector((state: RootState) => state.refetch.shouldRefetchWorkouts)
+  const shouldRefetchWorkouts = useSelector((state: RootState) => state.refetch.shouldRefetchWorkouts);
 
   useEffect(() => {
+    if (getAllWorkoutsLoading) {
+      setIsInitialRender(false);
+      dispatch(disableRefetchWorkouts());
+    };
+
     if (isInitialRender && shouldRefetchWorkouts) {
       getAllWorkouts();
       setIsInitialRender(false);
@@ -54,7 +59,7 @@ const Workouts = () => {
       dispatch(disableRefetchWorkouts());
       return;
     }
-  }, [dispatch, getAllWorkouts, isInitialRender, shouldRefetchWorkouts]);
+  }, [dispatch, getAllWorkouts, getAllWorkoutsLoading, isInitialRender, shouldRefetchWorkouts]);
 
 
 

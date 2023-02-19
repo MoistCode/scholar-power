@@ -37,6 +37,8 @@ const CreateWorkout = () => {
   } = useCreateWorkoutPlan()
 
   const onCreateNewWorkout = useCallback(() => {
+    if (isCreatingWorkoutPlan) return;
+
     const workoutName = workoutNameRef.current?.value;
 
     if (!uid) {
@@ -68,7 +70,7 @@ const CreateWorkout = () => {
     }
 
     createNewWorkoutPlanFn(variables);
-  }, [createNewWorkoutPlanFn, listOfExercises, uid]);
+  }, [createNewWorkoutPlanFn, isCreatingWorkoutPlan, listOfExercises, uid]);
 
   useLoadingAlert({
     loading: isCreatingWorkoutPlan,
