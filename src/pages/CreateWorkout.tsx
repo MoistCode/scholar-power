@@ -1,6 +1,6 @@
 import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption } from "@ionic/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { informationCircleOutline } from "ionicons/icons";
+import { informationCircleOutline, trashOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import ExerciseOptionList from "../components/ExerciseOptionList";
 import { useCreateWorkoutPlan } from "../hooks/useCreateWorkoutPlan";
@@ -15,6 +15,7 @@ const CreateWorkout = () => {
   const workoutNameRef = useRef<HTMLIonInputElement>(null);
 
   const [counter, setCounter] = useState(0);
+  const [disableFinishButton, setDisableFinishButton] = useState(true);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]>([]);
 
   let { uid } = useLoggedInUser() || {};
@@ -104,6 +105,37 @@ const CreateWorkout = () => {
     }
   }, [createdWorkoutPlanData?.Message, dispatch, resetCreateWorkoutPlanData])
 
+  useEffect(() => {
+    if (!listOfExercises) return;
+
+    if (listOfExercises.length > 0 && disableFinishButton) {
+      setDisableFinishButton(false);
+    }
+
+    if (!listOfExercises.length && !disableFinishButton) {
+      setDisableFinishButton(true);
+    }
+  }, [disableFinishButton, listOfExercises]);
+
+  const onDeleteExercise = useCallback((dataAttribute: string) => {
+    const newListOfExercises = listOfExercises.filter((exercise) => {
+      return exercise.dataAttribute !== dataAttribute;
+    });
+
+    for (const exercise of newListOfExercises) {
+      const { dataAttribute } = exercise;
+      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
+
+      exercise.sets = sets?.value ? String(sets.value) : '';
+      exercise.reps = reps?.value ? String(reps.value) : '';
+      exercise.load = load?.value ? String(load.value) : '';
+    }
+
+    setListOfExercises(newListOfExercises);
+  }, [listOfExercises]);
+
   if (createdWorkoutPlanData?.Message === 'workout created') {
     return <Redirect to="/workouts" />;
   }
@@ -114,7 +146,13 @@ const CreateWorkout = () => {
         <IonToolbar>
           <IonTitle>Create workout</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={onCreateNewWorkout} color="success">Finish</IonButton>
+            <IonButton
+              onClick={onCreateNewWorkout}
+              color="success"
+              disabled={disableFinishButton}
+            >
+              Finish
+            </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -124,14 +162,35 @@ const CreateWorkout = () => {
             <IonLabel>Workout Name:</IonLabel>
             <IonInput ref={workoutNameRef} placeholder="Enter workout name" />
           </IonItem>
-          {listOfExercises.map((exercise, idx: number) => {
+          {listOfExercises.map((exercise) => {
             const {
               name,
               instructions,
               dataAttribute,
+              sets,
+              reps,
+              load,
             } = exercise;
 
             let triggerId = `open-exercise-descripton-modal-${dataAttribute}`;
+
+            const setsProps = {
+              'data-sets-input': dataAttribute,
+              type: 'number',
+            } as any;
+
+            const repsProps = {
+              'data-reps-input': dataAttribute,
+              type: 'number',
+            } as any;
+
+            const loadProps = {
+              'data-load-input': dataAttribute,
+            } as any;
+
+            if (sets) setsProps.value = sets;
+            if (reps) repsProps.value = reps;
+            if (load) loadProps.value = load;
 
             return (
               <IonList
@@ -144,6 +203,9 @@ const CreateWorkout = () => {
                   <IonButton fill="clear" id={triggerId}>
                     <IonIcon slot="icon-only" icon={informationCircleOutline} />
                   </IonButton>
+                  <IonButton onClick={() => onDeleteExercise(dataAttribute)} fill="clear">
+                    <IonIcon slot="icon-only" icon={trashOutline} />
+                  </IonButton>
                   <ExerciseDescriptionModal
                     triggerId={triggerId}
                     instructions={instructions}
@@ -151,15 +213,15 @@ const CreateWorkout = () => {
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Sets: </IonLabel>
-                  <IonInput type="number" data-sets-input={dataAttribute} />
+                  <IonInput {...setsProps}/>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Reps: </IonLabel>
-                  <IonInput type="number" data-reps-input={dataAttribute} />
+                  <IonInput {...repsProps}/>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Load: </IonLabel>
-                  <IonInput data-load-input={dataAttribute} />
+                  <IonInput {...loadProps}/>
                 </IonItem>
               </IonList>
             );
@@ -186,7 +248,10 @@ const CreateWorkout = () => {
 export default CreateWorkout;
 
 export const AddExerciseModal = (props: AddExerciseModalProps) => {
-  const { triggerId, onSelectExercise } = props;
+  const {
+    triggerId,
+    onSelectExercise,
+  } = props;
   
   const [muscleGroup, setMuscleGroup] = useState<MuscleGroupOptions>();
 
@@ -259,6 +324,9 @@ type CurrentListOfExercises = {
   instructions: string;
   equipment: string;
   dataAttribute: string;
+  sets?: string;
+  reps?: string;
+  load?: string;
 };
 
 type AddExerciseModalProps = {

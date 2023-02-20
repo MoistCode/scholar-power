@@ -1,5 +1,5 @@
 import { IonPage, IonContent, IonButton, IonBackButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonLabel, IonList, IonText, IonIcon, IonInput, IonItem } from "@ionic/react";
-import { informationCircleOutline } from "ionicons/icons";
+import { informationCircleOutline, trashOutline } from "ionicons/icons";
 import { useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
@@ -23,6 +23,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
   const urlParts = match.url.split('/');
   const id = urlParts[2];
 
+  const [disableFinishButton, setDisableFinishButton] = useState(true);
   const [workoutName, setWorkoutName] = useState<string|undefined>();
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
@@ -124,6 +125,18 @@ const EditWorkout = (props: { match: { url: string }}) => {
     message: 'Creating workout...',
   })
 
+  useEffect(() => {
+    if (!listOfExercises) return;
+
+    if (listOfExercises.length > 0 && disableFinishButton) {
+      setDisableFinishButton(false);
+    }
+
+    if (!listOfExercises.length && !disableFinishButton) {
+      setDisableFinishButton(true);
+    }
+  }, [disableFinishButton, listOfExercises]);
+
   const onSelectExercise = useCallback((exercise: ExerciseOptionItem) => {
     const { id: exerciseId, name, instructions, equipment } = exercise;
 
@@ -150,7 +163,28 @@ const EditWorkout = (props: { match: { url: string }}) => {
 
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
-  }, [counter, listOfExercises])
+  }, [counter, listOfExercises]);
+
+  const onDeleteExercise = useCallback((dataAttribute: string) => {
+    if (!listOfExercises) return;
+
+    const newListOfExercises = listOfExercises.filter((exercise) => {
+      return exercise.dataAttribute !== dataAttribute;
+    });
+
+    for (const exercise of newListOfExercises) {
+      const { dataAttribute } = exercise;
+      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
+
+      exercise.sets = sets?.value ? String(sets.value) : '';
+      exercise.reps = reps?.value ? String(reps.value) : '';
+      exercise.load = load?.value ? String(load.value) : '';
+    }
+
+    setListOfExercises(newListOfExercises);
+  }, [listOfExercises]);
 
   if (editNewWorkoutPlanData?.Message === 'workout updated') {
     dispatch(refetchWorkouts());
@@ -166,7 +200,13 @@ const EditWorkout = (props: { match: { url: string }}) => {
           </IonButtons>
           <IonTitle>Edit workout</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={onEditWorkout} color="success">Finish</IonButton>
+            <IonButton
+              onClick={onEditWorkout}
+              color="success"
+              disabled={disableFinishButton}
+            >
+              Finish
+            </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -185,7 +225,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
               placeholder="Enter workout name"
             />
           </IonItem>
-          {listOfExercises?.map((exercise, idx) => {
+          {listOfExercises?.map((exercise) => {
             const {
               name,
               instructions,
@@ -196,6 +236,24 @@ const EditWorkout = (props: { match: { url: string }}) => {
             } = exercise;
 
             let triggerId = `open-exercise-descripton-modal-${dataAttribute}`;
+
+            const setsProps = {
+              'data-sets-input': dataAttribute,
+              type: 'number',
+            } as any;
+
+            const repsProps = {
+              'data-reps-input': dataAttribute,
+              type: 'number',
+            } as any;
+
+            const loadProps = {
+              'data-load-input': dataAttribute,
+            } as any;
+
+            if (sets) setsProps.value = sets;
+            if (reps) repsProps.value = reps;
+            if (load) loadProps.value = load;
 
             return (
               <IonList
@@ -208,6 +266,9 @@ const EditWorkout = (props: { match: { url: string }}) => {
                   <IonButton fill="clear" id={triggerId}>
                     <IonIcon slot="icon-only" icon={informationCircleOutline} />
                   </IonButton>
+                  <IonButton onClick={() => onDeleteExercise(dataAttribute)} fill="clear">
+                    <IonIcon slot="icon-only" icon={trashOutline} />
+                  </IonButton>
                   <ExerciseDescriptionModal
                     triggerId={triggerId}
                     instructions={instructions}
@@ -215,15 +276,15 @@ const EditWorkout = (props: { match: { url: string }}) => {
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Sets: </IonLabel>
-                  <IonInput value={sets} data-sets-input={dataAttribute} />
+                  <IonInput {...setsProps} />
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Reps: </IonLabel>
-                  <IonInput value={reps} data-reps-input={dataAttribute} />
+                  <IonInput {...repsProps} />
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Load: </IonLabel>
-                  <IonInput value={load} data-load-input={dataAttribute} />
+                  <IonInput {...loadProps} />
                 </IonItem>
               </IonList>
             );
