@@ -46,7 +46,8 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_ENV=development ionic serve",
+    "start-fresh": "npm i && npm run start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject"
@@ -71,6 +72,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "4.6.2",
+    "@ionic/cli": "^6.20.8",
     "@types/lodash": "^4.14.191"
   },
   "description": "An Ionic project"
