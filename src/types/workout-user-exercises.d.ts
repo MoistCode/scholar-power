@@ -9,6 +9,7 @@ type WorkoutUserExerciseItemFromAPI = {
   ExerciseMuscle: string;
   ExerciseEquipment: string;
   ExerciseInstructions:string;
+  ExerciseID: string;
 }
 
 type WorkoutUserExerciseItem = {
@@ -21,5 +22,7 @@ type WorkoutUserExerciseItem = {
   exerciseName: string;
   exerciseMuscle: string;
   exerciseEquipment: string;
-  exerciseInstructions:string;
+  exerciseInstructions: string;
+  exerciseId: string;
+  workoutName: string;
 };

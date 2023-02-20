@@ -35,11 +35,16 @@ type EditWorkoutApiResponse = {
   Message: string;
 };
 
-type EditWorkoutVariables = EditWorkoutExerciseItem[];
+type EditWorkoutVariables = {
+  uid: string;
+  name: string;
+  exercises: EditWorkoutExerciseItem[];
+}
 
 type EditWorkoutExerciseItem = {
   sets: string;
   reps: string;
   load: string;
-  id: string;
+  id?: string;
+  exercise_id: string;
 }

@@ -40,6 +40,8 @@ export const useExerciseList = (props: { planId: string }) => {
           exerciseMuscle: workoutExercise.ExerciseMuscle,
           exerciseEquipment: workoutExercise.ExerciseEquipment,
           exerciseInstructions: workoutExercise.ExerciseInstructions,
+          exerciseId: workoutExercise.ExerciseID,
+          workoutName: workoutExercise.Name,
         };
       });
   }

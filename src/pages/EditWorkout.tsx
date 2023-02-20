@@ -1,6 +1,6 @@
 import { IonPage, IonContent, IonButton, IonBackButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonLabel, IonList, IonText, IonIcon, IonInput, IonItem } from "@ionic/react";
 import { informationCircleOutline } from "ionicons/icons";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import { useEditWorkoutPlan } from "../hooks/useEditWorkoutPlan";
@@ -10,6 +10,7 @@ import { AddExerciseModal } from "./CreateWorkout";
 import { Redirect } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { refetchWorkouts } from "../slices/refetch";
+import { useLoggedInUser } from "../hooks/useLoggedInUser";
 
 const EditWorkout = (props: { match: { url: string }}) => {
   const {
@@ -22,8 +23,12 @@ const EditWorkout = (props: { match: { url: string }}) => {
   const urlParts = match.url.split('/');
   const id = urlParts[2];
 
+  const [workoutName, setWorkoutName] = useState<string|undefined>();
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
+  const workoutNameRef = useRef<HTMLIonInputElement>(null);
+
+  let { uid } = useLoggedInUser() || {};
 
   const {
     loading: getAllExercisesLoading,
@@ -39,9 +44,14 @@ const EditWorkout = (props: { match: { url: string }}) => {
   useEffect(() => {
     if (!exerciseList || getAllExercisesLoading || listOfExercises) return;
 
+    if (!workoutName && exerciseList.length > 0) {
+      setWorkoutName(exerciseList[0].workoutName);
+    }
+
     const exerciseListWithAttr = exerciseList.map((exercise, idx) => {
       return {
         id: exercise.id,
+        exerciseId: exercise.exerciseId,
         name: exercise.exerciseName,
         instructions: exercise.exerciseInstructions,
         equipment: exercise.exerciseEquipment,
@@ -57,7 +67,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
     });
 
     setListOfExercises(exerciseListWithAttr);
-  }, [exerciseList, getAllExercisesLoading, listOfExercises]);
+  }, [exerciseList, getAllExercisesLoading, listOfExercises, workoutName]);
 
   const triggerId = 'open-add-exercise-modal-for-editing';
 
@@ -70,13 +80,24 @@ const EditWorkout = (props: { match: { url: string }}) => {
   const onEditWorkout = useCallback(() => {
     if (isEditingWorkoutPlan) return;
 
-    const variables: EditWorkoutExerciseItem[] = [];
+    if (!uid) {
+      return;
+    }
+
+    const workoutName = workoutNameRef.current?.value;
+
+    const variables: EditWorkoutVariables = {
+      uid,
+      name: workoutName ? String(workoutName) : '',
+      exercises: []
+    };
 
     if (!listOfExercises) return;
 
     for (const exerciseListItem of listOfExercises) {
       const {
         id,
+        exerciseId,
         dataAttribute,
       } = exerciseListItem;
 
@@ -84,16 +105,17 @@ const EditWorkout = (props: { match: { url: string }}) => {
       const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
       const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
 
-      variables.push({
+      variables.exercises.push({
         sets: sets?.value ? String(sets.value) : '',
         reps: reps?.value ? String(reps.value) : '',
         load: load?.value ? String(load.value) : '',
         id,
+        exercise_id: exerciseId,
       })
     }
 
     editNewWorkoutPlanFn({ planId: id, variables });
-  }, [editNewWorkoutPlanFn, id, isEditingWorkoutPlan, listOfExercises]);
+  }, [editNewWorkoutPlanFn, id, isEditingWorkoutPlan, listOfExercises, uid]);
 
   const dispatch = useDispatch();
 
@@ -103,7 +125,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
   })
 
   const onSelectExercise = useCallback((exercise: ExerciseOptionItem) => {
-    const { id, name, instructions, equipment } = exercise;
+    const { id: exerciseId, name, instructions, equipment } = exercise;
 
     let currentListOfExercises: CurrentListOfExercises[] = [];
 
@@ -112,7 +134,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
     }
 
     currentListOfExercises.push({
-      id,
+      exerciseId,
       name,
       equipment,
       instructions,
@@ -120,7 +142,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
       sets: '',
       reps: '',
       dataAttribute: getDataAttributeFromExercise({
-        id,
+        id: exerciseId,
         name,
         counter,
       }),
@@ -155,6 +177,14 @@ const EditWorkout = (props: { match: { url: string }}) => {
           </IonText>
         }
         <IonList>
+          <IonItem>
+            <IonLabel>Workout Name:</IonLabel>
+            <IonInput
+              value={workoutName}
+              ref={workoutNameRef}
+              placeholder="Enter workout name"
+            />
+          </IonItem>
           {listOfExercises?.map((exercise, idx) => {
             const {
               name,
@@ -236,7 +266,8 @@ type getDataAttributeFromExerciseArgs = {
 }
 
 type CurrentListOfExercises = {
-  id: string;
+  id?: string;
+  exerciseId: string;
   name: string;
   instructions: string;
   equipment: string;
