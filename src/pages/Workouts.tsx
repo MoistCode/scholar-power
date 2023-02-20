@@ -69,10 +69,13 @@ const Workouts = () => {
     <IonPage>
       <Header title="Workouts" />
       <IonContent fullscreen>
-        {(listOfWorkouts && listOfWorkouts.length > 0)
-          ? <WorkoutList workouts={listOfWorkouts}/>
-          : <EmptyWorkout />
+        {(listOfWorkouts && listOfWorkouts.length > 0) &&
+          <WorkoutList workouts={listOfWorkouts}/>
         }
+        {!getAllWorkoutsLoading && !getAllWorkoutsError && (listOfWorkouts && listOfWorkouts.length === 0) &&
+          <EmptyWorkout />
+        }
+
         {getAllWorkoutsError &&
           <IonText color="primary">
             <h1>Something went wrong. Please try again later.</h1>
