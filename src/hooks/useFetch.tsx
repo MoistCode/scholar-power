@@ -60,5 +60,5 @@ export default function useFetch<DataReturnType>() {
 type FetchProps = {
   variables?: object;
   endpoint: string;
-  method: 'GET'|'POST'|'PUT';
+  method: 'GET'|'POST'|'PUT'|'DELETE';
 };
