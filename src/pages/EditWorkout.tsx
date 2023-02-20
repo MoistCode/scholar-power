@@ -161,6 +161,17 @@ const EditWorkout = (props: { match: { url: string }}) => {
       }),
     });
 
+    for (const exercise of currentListOfExercises) {
+      const { dataAttribute } = exercise;
+      const sets = document.querySelector(`[data-sets-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const reps = document.querySelector(`[data-reps-input="${dataAttribute}"]`) as HTMLIonInputElement;
+      const load = document.querySelector(`[data-load-input="${dataAttribute}"]`) as HTMLIonInputElement;
+
+      exercise.sets = sets?.value ? String(sets.value) : '';
+      exercise.reps = reps?.value ? String(reps.value) : '';
+      exercise.load = load?.value ? String(load.value) : '';
+    }
+
     setCounter(counter + 1);
     setListOfExercises(currentListOfExercises);
   }, [counter, listOfExercises]);
