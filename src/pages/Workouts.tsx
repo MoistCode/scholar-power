@@ -1,8 +1,10 @@
 import {
   IonContent,
+  IonIcon,
   IonPage,
   IonText,
 } from '@ionic/react';
+import { barbellOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
@@ -62,12 +64,14 @@ const Workouts = () => {
   }, [dispatch, getAllWorkouts, getAllWorkoutsLoading, isInitialRender, shouldRefetchWorkouts]);
 
 
-
   return (
     <IonPage>
       <Header title="Workouts" />
       <IonContent fullscreen>
-        {listOfWorkouts && <WorkoutList workouts={listOfWorkouts}/>}
+        {(listOfWorkouts && listOfWorkouts.length > 0)
+          ? <WorkoutList workouts={listOfWorkouts}/>
+          : <EmptyWorkout />
+        }
         {getAllWorkoutsError &&
           <IonText color="primary">
             <h1>Something went wrong. Please try again later.</h1>
@@ -79,3 +83,16 @@ const Workouts = () => {
 };
 
 export default Workouts;
+
+// Component to let the user know they can create a workout since they don't
+// have any.
+const EmptyWorkout = () => {
+  return (
+    <div className="ion-padding">
+      <IonIcon className="ion-text-center" icon={barbellOutline} size="large" />
+      <IonText className="ion-text-center" color="primary">
+        <h1>You don't have any workouts yet. Create one!</h1>
+      </IonText>
+    </div>
+  );
+};
