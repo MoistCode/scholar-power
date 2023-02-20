@@ -48,7 +48,7 @@
   "scripts": {
     "start": "REACT_APP_ENV=development ionic serve",
     "start-fresh": "npm i && npm run start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject"
   },
