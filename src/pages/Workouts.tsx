@@ -13,6 +13,7 @@ import useLoadingAlert from '../hooks/useLoadingAlert';
 import { useWorkoutList } from '../hooks/useWorkoutList';
 import { disableRefetchWorkouts } from '../slices/refetch';
 import { RootState } from '../store';
+import styles from './Workouts.module.css';
 
 /**
  * This component is the page responsible for displaying the user-generated
@@ -88,7 +89,7 @@ export default Workouts;
 // have any.
 const EmptyWorkout = () => {
   return (
-    <div className="ion-padding">
+    <div className={`${styles.emptyWorkoutContainer} ion-padding`}>
       <IonIcon className="ion-text-center" icon={barbellOutline} size="large" />
       <IonText className="ion-text-center" color="primary">
         <h1>You don't have any workouts yet. Create one!</h1>
