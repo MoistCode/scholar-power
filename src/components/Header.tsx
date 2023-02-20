@@ -11,7 +11,6 @@ import {
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { personCircle } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
-import { Redirect } from 'react-router';
 
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 
