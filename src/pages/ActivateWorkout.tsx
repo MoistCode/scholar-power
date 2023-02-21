@@ -89,7 +89,7 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
       endpoint: '/api/v1/history',
       method: 'POST',
       variables: {
-        data: `${day}${month}${year}`,
+        date: `${day}-${month}-${year}`,
         duration: msToTime(msSinceStarted),
         plan_id: id,
         athlete_id: uid,

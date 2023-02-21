@@ -48,3 +48,21 @@ type EditWorkoutExerciseItem = {
   id?: string;
   exercise_id: string;
 }
+
+type CompletedWorkoutFromAPI = {
+  AthleteID: string;
+  Date: string;
+  Duration: string;
+  ID: string;
+  Notes: string;
+  PlanID: string;
+}
+
+type CompletedWorkout = {
+  athleteId: string;
+  date: string;
+  duration: string;
+  id: string;
+  notes: string;
+  planId: string;
+}
