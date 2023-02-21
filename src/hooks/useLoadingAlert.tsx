@@ -24,6 +24,10 @@ const useLoadingAlert = (props: LoadingAlertProps) => {
       delete timer.current;
       dismiss();
     }
+
+    return () => {
+      dismiss();
+    }
   }, [dismiss, loading, message, present]);
 };
 
