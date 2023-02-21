@@ -1,10 +1,15 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, IonTitle, IonToolbar } from "@ionic/react";
+import { informationCircleOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
+import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import { useExerciseList } from "../hooks/useExerciseList";
+import useFetch from "../hooks/useFetch";
 import useLoadingAlert from "../hooks/useLoadingAlert";
+import { useLoggedInUser } from "../hooks/useLoggedInUser";
 import { endWorkout } from "../slices/activatedWorkout";
+import { refetchWorkoutHistory } from "../slices/refetch";
 import { RootState } from "../store";
 
 const ActivateWorkout = (props: { match: { url: string }}) => {
@@ -12,17 +17,21 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
 
   // TODO: This is a hacky way to get the ID of the workout. We should
   // probably use a different method. For some reason the ID is not being
-  // matched on the URL. Jacob, don't worry about this TODO. I'll fix it.
+  // matched on the URL.
   const urlParts = match.url.split('/');
   const id = urlParts[2];
 
   const {
     loading: getAllExercisesLoading,
-    // TODO: Do something with this error. Maybe show a modal that lets the user
-    // know that something went wrong with a button that refreshes the page?
-    // error: getAllExercisesError,
+    error: getAllExercisesError,
     data: exerciseList
   } = useExerciseList({ planId: id })
+
+  const {
+    fetchDataFn: completeWorkout,
+    loading: completeWorkoutLoading,
+    data: completeWorkoutData,
+  } = useFetch<{ Message: string }>();
 
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
 
@@ -31,12 +40,20 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
     message: 'Loading workouts...',
   });
 
+  useLoadingAlert({
+    loading: completeWorkoutLoading,
+    message: 'Completing workout...',
+  });
+
+  let { uid } = useLoggedInUser() || {};
+
   useEffect(() => {
     if (!exerciseList || getAllExercisesLoading || listOfExercises) return;
 
     const exerciseListWithAttr = exerciseList.map((exercise, idx) => {
       return {
         id: exercise.id,
+        exerciseId: exercise.exerciseId,
         name: exercise.exerciseName,
         instructions: exercise.exerciseInstructions,
         equipment: exercise.exerciseEquipment,
@@ -56,15 +73,40 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
 
   const dispatch = useDispatch();
   const hasActivatedWorkout = useSelector((state: RootState) => state.activatedWorkout.hasActivatedWorkout);
+  const timer = useSelector((state: RootState) => state.activatedWorkout.timer) as number;
 
+  const onCompleteWorkout = async () => {
+    if (!uid) return;
 
-  const onCompleteWorkout = () => {
-    // TODO: Add logic to complete workout. Perhaps we can show a modal that
-    // lets the user know they completed it with a button that redirecst to
-    // "/workouts"?
-    console.log('Completed workout, yay!');
-    dispatch(endWorkout());
+    const now = new Date();
+    const msSinceStarted: number = now.getTime() - timer;
+
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const year = now.getFullYear();
+
+    await completeWorkout({
+      endpoint: '/api/v1/history',
+      method: 'POST',
+      variables: {
+        data: `${day}${month}${year}`,
+        duration: msToTime(msSinceStarted),
+        plan_id: id,
+        athlete_id: uid,
+      }
+    });
   };
+
+  useEffect(() => {
+    if (completeWorkoutData?.Message === "History created") {
+      dispatch(refetchWorkoutHistory());
+      dispatch(endWorkout());
+    }
+  }, [completeWorkoutData, dispatch])
+
+  if (completeWorkoutData?.Message === "History created") {
+    return <Redirect to="/workouthistory" />;
+  }
 
   if (!hasActivatedWorkout) {
     return <Redirect to="/workouts" />;
@@ -77,19 +119,58 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
           <IonButtons slot="start">
             <IonBackButton />
           </IonButtons>
-          {/* TODO: Change the title */}
-          <IonTitle>Title</IonTitle>
+          <IonTitle>Working out...</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={onCompleteWorkout} color="success">Complete</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {/*
-          TODO: Work with `listOfExercises` to show users a list of their
-          exercises that they should be performing during this workout
-        */}
-        <pre>{JSON.stringify(listOfExercises, null, 2)}</pre>
+        {getAllExercisesError &&
+          <IonText color="primary">
+            <h1>Something went wrong. Please try again later.</h1>
+          </IonText>
+        }
+        {listOfExercises?.map((exercise) => {
+          const {
+            name,
+            instructions,
+            dataAttribute,
+            load,
+            sets,
+            reps,
+          } = exercise;
+
+          let triggerId = `open-activate-exercise-descripton-modal-${dataAttribute}`;
+
+          return (
+            <IonList
+              className="ion-padding"
+              key={dataAttribute}
+              data-exercise-item={dataAttribute}
+            >
+              <IonItem>
+                <IonLabel>{name}</IonLabel>
+                <IonButton fill="clear" id={triggerId}>
+                  <IonIcon slot="icon-only" icon={informationCircleOutline} />
+                </IonButton>
+                <ExerciseDescriptionModal
+                  triggerId={triggerId}
+                  instructions={instructions}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel>Sets: {sets}</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Reps: {reps}</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel>Load: {load}</IonLabel>
+              </IonItem>
+            </IonList>
+          );
+        })}
       </IonContent>
     </IonPage>
   );
@@ -123,3 +204,15 @@ type CurrentListOfExercises = {
   sets: string;
   reps: string;
 };
+
+function msToTime(duration: number) {
+  let seconds: string|number = Math.floor((duration / 1000) % 60);
+  let minutes: string|number = Math.floor((duration / (1000 * 60)) % 60);
+  let hours: string|number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds;
+}

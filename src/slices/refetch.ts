@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   shouldRefetchWorkouts: false,
-  shouldRefetchUserWorkout: false,
+  shouldRefetchWorkoutHistory: false,
 };
 
 export const refetchSlice = createSlice({
@@ -15,12 +15,20 @@ export const refetchSlice = createSlice({
     disableRefetchWorkouts: (state) => {
       state.shouldRefetchWorkouts = false;
     },
+    refetchWorkoutHistory: (state) => {
+      state.shouldRefetchWorkoutHistory = true;
+    },
+    disableRefetchWorkoutHistory: (state) => {
+      state.shouldRefetchWorkoutHistory = false;
+    },
   },
 })
 
 export const {
   refetchWorkouts,
   disableRefetchWorkouts,
+  refetchWorkoutHistory,
+  disableRefetchWorkoutHistory,
 } = refetchSlice.actions
 
 export default refetchSlice.reducer

@@ -69,6 +69,7 @@ const SignedInTabs = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
+        <Route exact path="/workouthistory" component={History} />
         <Route exact path="/workouts" component={Workouts} />
         <Route exact path="/workoutcreate" component={CreateWorkout} />
         <Route
@@ -83,7 +84,6 @@ const SignedInTabs = () => {
           }}
         />
         <Route exact path="/workout/:id" component={EditWorkout} />
-        <Route exact path="/workouthistory" component={History} />
         <Route
           render={(props) => {
             let url = hasActivatedWorkout
