@@ -1,4 +1,4 @@
-import { IonPage, IonContent, IonButton, IonBackButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonLabel, IonList, IonText, IonIcon, IonInput, IonItem } from "@ionic/react";
+import { IonPage, IonContent, IonButton, IonBackButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonLabel, IonList, IonText, IonIcon, IonInput, IonItem, useIonToast } from "@ionic/react";
 import { informationCircleOutline, trashOutline } from "ionicons/icons";
 import { useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
@@ -197,8 +197,17 @@ const EditWorkout = (props: { match: { url: string }}) => {
     setListOfExercises(newListOfExercises);
   }, [listOfExercises]);
 
+  const [present] = useIonToast();
+
   if (editNewWorkoutPlanData?.Message === 'workout updated') {
     dispatch(refetchWorkouts());
+
+    present({
+      message: 'Workout edited!',
+      duration: 1500,
+      position: 'middle',
+    });
+
     return <Redirect to="/workouts" />;
   }
 

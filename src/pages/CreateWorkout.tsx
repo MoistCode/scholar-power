@@ -1,4 +1,4 @@
-import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption } from "@ionic/react";
+import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption, useIonToast } from "@ionic/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { informationCircleOutline, trashOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
@@ -73,6 +73,8 @@ const CreateWorkout = () => {
     createNewWorkoutPlanFn(variables);
   }, [createNewWorkoutPlanFn, isCreatingWorkoutPlan, listOfExercises, uid]);
 
+  const [present] = useIonToast();
+
   useLoadingAlert({
     loading: isCreatingWorkoutPlan,
     message: 'Creating workout...',
@@ -137,6 +139,12 @@ const CreateWorkout = () => {
   }, [listOfExercises]);
 
   if (createdWorkoutPlanData?.Message === 'workout created') {
+    present({
+      message: 'Workout created!',
+      duration: 1500,
+      position: 'middle',
+    });
+
     return <Redirect to="/workouts" />;
   }
 
