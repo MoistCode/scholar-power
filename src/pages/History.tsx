@@ -2,6 +2,7 @@ import { IonContent, IonPage, useIonToast } from '@ionic/react';
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
 import useLoadingAlert from '../hooks/useLoadingAlert';
+import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
 
 /**
@@ -17,6 +18,8 @@ const WorkoutHistory = () => {
     // error, // Uncomment this line.
   } = useWorkoutHistory();
 
+  let { uid } = useLoggedInUser() || {};
+
   const {
     fetchDataFn: deleteWorkoutHistory,
     loading: deleteWorkoutHistoryLoading,
@@ -25,9 +28,14 @@ const WorkoutHistory = () => {
 
   // TODO: Use this function to delete a workout history.
   const onDeleteWorkout = async (id: string) => {
+    if (!uid) return;
+
     await deleteWorkoutHistory({
       endpoint: `/api/v1/history/${id}`,
       method: 'DELETE',
+      variables: {
+        athlete_id: uid,
+      },
     });
   }
 
