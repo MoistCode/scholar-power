@@ -142,7 +142,7 @@ const CreateWorkout = () => {
     present({
       message: 'Workout created!',
       duration: 1500,
-      position: 'middle',
+      position: 'top',
     });
 
     return <Redirect to="/workouts" />;

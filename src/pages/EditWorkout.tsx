@@ -205,7 +205,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
     present({
       message: 'Workout edited!',
       duration: 1500,
-      position: 'middle',
+      position: 'top',
     });
 
     return <Redirect to="/workouts" />;

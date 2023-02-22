@@ -49,7 +49,7 @@ const WorkoutHistory = () => {
     present({
       message: 'Deleted workout history!',
       duration: 1500,
-      position: 'middle',
+      position: 'top',
     });
   }
 
