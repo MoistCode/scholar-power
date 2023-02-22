@@ -31,11 +31,36 @@ import { endWorkout } from '../slices/activatedWorkout';
  * the main pages of the app when the user is signed in.
  */
 const SignedInTabs = () => {
+  return (
+    <Tabs>
+      <Routes />
+    </Tabs>
+  );
+}
+
+export default SignedInTabs;
+
+const Routes = () => {
+  return (
+    <>
+      <Route exact path="/workouthistory" component={History} />
+      <Route exact path="/workouts" component={Workouts} />
+      <Route exact path="/workoutcreate" component={CreateWorkout} />
+      <Route exact path="/workoutactivate/:id" component={ActivateWorkout} />
+      <Route exact path="/workout/:id" component={EditWorkout} />
+      <Route render={() => <Redirect to="/workouts" />} />
+    </>
+  );
+};
+
+const Tabs: React.FunctionComponent<{ children: React.ReactNode }>  = (props) => {
   const hasActivatedWorkout = useSelector((state: RootState) => state.activatedWorkout.hasActivatedWorkout);
-  const activatedWorkoutId = useSelector((state: RootState) => state.activatedWorkout.activatedWorkoutId);
-  const [present] = useIonActionSheet();
+  
   const [result, setResult] = useState<OverlayEventDetail>();
+
   const dispatch = useDispatch();
+
+  const [present] = useIonActionSheet();
 
   const handleCancelWorkout = () => {
     present({
@@ -69,32 +94,10 @@ const SignedInTabs = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route exact path="/workouthistory" component={History} />
-        <Route exact path="/workouts" component={Workouts} />
-        <Route exact path="/workoutcreate" component={CreateWorkout} />
-        <Route
-          exact
-          path="/workoutactivate/:id"
-          render={(props) => {
-            if (hasActivatedWorkout) {
-              return <ActivateWorkout {...props}/>;
-            }
-
-            return <Redirect to="/workouts" />;
-          }}
-        />
-        <Route exact path="/workout/:id" component={EditWorkout} />
-        <Route
-          render={(props) => {
-            let url = hasActivatedWorkout
-              ? `/workoutactivate/${activatedWorkoutId}`
-              : '/workouts';
-
-            return <Redirect to={url} />;
-          }}
-        />
+        {props.children}
       </IonRouterOutlet>
-    
+
+      
       {hasActivatedWorkout
         ? (
           <IonTabBar slot="bottom">
@@ -118,11 +121,9 @@ const SignedInTabs = () => {
               <IonIcon icon={newspaperOutline} />
               <IonLabel>History</IonLabel>
             </IonTabButton>
-            </IonTabBar>
+          </IonTabBar>
         )
       }
     </IonTabs>
   );
 };
-
-export default SignedInTabs;

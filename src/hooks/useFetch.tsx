@@ -30,7 +30,7 @@ export default function useFetch<DataReturnType>() {
       });
 
       let json = await res.json();
-      console.log(json);
+
       setData(json);
       setError(null);
     } catch (err: unknown) {
