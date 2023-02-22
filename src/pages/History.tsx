@@ -24,6 +24,7 @@ const WorkoutHistory = () => {
     fetchDataFn: deleteWorkoutHistory,
     loading: deleteWorkoutHistoryLoading,
     data: deleteWorkoutHistoryData,
+    reset: resetWorkoutHistory,
   } = useFetch<{ Message: string }>();
 
   // TODO: Use this function to delete a workout history.
@@ -42,6 +43,7 @@ const WorkoutHistory = () => {
   const [present] = useIonToast();
 
   if (deleteWorkoutHistoryData?.Message === "Poof! It's gone.") {
+    resetWorkoutHistory();
     refetchWorkoutHistory();
 
     present({
