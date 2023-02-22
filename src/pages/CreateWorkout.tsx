@@ -1,5 +1,5 @@
 import { IonPage, IonContent, IonButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonInput, IonItem, IonList, IonLabel, IonIcon, IonModal, IonSelect, IonSelectOption, useIonToast } from "@ionic/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { informationCircleOutline, trashOutline } from "ionicons/icons";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import ExerciseOptionList from "../components/ExerciseOptionList";
@@ -253,7 +253,7 @@ const CreateWorkout = () => {
   );
 };
 
-export default CreateWorkout;
+export default memo(CreateWorkout);
 
 export const AddExerciseModal = (props: AddExerciseModalProps) => {
   const {

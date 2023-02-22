@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+  import { Redirect, Route } from 'react-router-dom';
 import {
   IonIcon,
   IonLabel,
@@ -44,8 +44,12 @@ const Routes = () => {
   return (
     <>
       <Route exact path="/workouthistory" component={History} />
-      <Route exact path="/workouts" component={Workouts} />
-      <Route exact path="/workoutcreate" component={CreateWorkout} />
+      <Route exact path="/workouts">
+        <Workouts />
+      </Route>
+      <Route exact path="/workoutcreate">
+        <CreateWorkout />
+      </Route>
       <Route exact path="/workoutactivate/:id" component={ActivateWorkout} />
       <Route exact path="/workout/:id" component={EditWorkout} />
       <Route render={() => <Redirect to="/workouts" />} />

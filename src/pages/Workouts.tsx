@@ -5,7 +5,7 @@ import {
   IonText,
 } from '@ionic/react';
 import { barbellOutline } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import WorkoutList from '../components/WorkoutList';
@@ -29,8 +29,6 @@ const Workouts = () => {
 
   const dispatch = useDispatch();
 
-  const [isInitialRender, setIsInitialRender] = useState(true);
-
   useLoadingAlert({
     loading: getAllWorkoutsLoading,
     message: 'Loading workout...',
@@ -39,31 +37,17 @@ const Workouts = () => {
   const shouldRefetchWorkouts = useSelector((state: RootState) => state.refetch.shouldRefetchWorkouts);
 
   useEffect(() => {
-    if (getAllWorkoutsLoading) {
-      setIsInitialRender(false);
-      dispatch(disableRefetchWorkouts());
-    };
-
-    if (isInitialRender && shouldRefetchWorkouts) {
-      getAllWorkouts();
-      setIsInitialRender(false);
-      dispatch(disableRefetchWorkouts());
-      return;
-    }
-
-    if (isInitialRender) {
-      getAllWorkouts();
-      setIsInitialRender(false);
-      return;
-    }
-
     if (shouldRefetchWorkouts) {
-      getAllWorkouts();
+      getAllWorkouts({ force: true });
       dispatch(disableRefetchWorkouts());
       return;
     }
-  }, [dispatch, getAllWorkouts, getAllWorkoutsLoading, isInitialRender, shouldRefetchWorkouts]);
+  }, [dispatch, getAllWorkouts, shouldRefetchWorkouts]);
 
+  useEffect(() => {
+    getAllWorkouts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonPage>
@@ -86,7 +70,7 @@ const Workouts = () => {
   );
 };
 
-export default Workouts;
+export default memo(Workouts);
 
 // Component to let the user know they can create a workout since they don't
 // have any.

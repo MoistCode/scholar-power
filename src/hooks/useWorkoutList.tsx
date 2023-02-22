@@ -14,10 +14,11 @@ export const useWorkoutList = () => {
     data,
   } = useFetch<WorkoutOptionItemFromAPI[]>();
 
-  const getAllWorkoutsFn = useCallback(async () => {
+  const getAllWorkoutsFn = useCallback(async (args?: { force?: boolean }) => {
     await getAllWorkouts({
       endpoint: `/api/v1/workout/user/${username}`,
       method: 'GET',
+      force: args?.force,
     });
   }, [getAllWorkouts, username]);
 

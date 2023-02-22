@@ -44,7 +44,7 @@ const WorkoutHistory = () => {
 
   if (deleteWorkoutHistoryData?.Message === "Poof! It's gone.") {
     resetWorkoutHistory();
-    refetchWorkoutHistory();
+    refetchWorkoutHistory({ force: true });
 
     present({
       message: 'Deleted workout history!',

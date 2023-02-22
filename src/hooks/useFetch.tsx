@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 import { getErrorMessage } from '../utils/errorMessage';
 import { useLoggedInUser } from './useLoggedInUser';
 
+const cache: any = {};
+
 let baseUrl = process.env.REACT_APP_ENV === 'development'
   ? 'http://0.0.0.0:3000'
   : 'https://test.seismos.io';
@@ -12,7 +14,16 @@ export default function useFetch<DataReturnType>() {
   let [data, setData] = useState<DataReturnType|null>(null);
   let { token } = useLoggedInUser() || {};
 
-  let fetchDataFn = useCallback(async ({ variables, endpoint, method }: FetchProps) => {
+  let fetchDataFn = useCallback(async ({ variables, endpoint, method, force }: FetchProps) => {
+    const url = `${baseUrl}${endpoint}`;
+    const cacheName = `${url}${JSON.stringify(variables)}`;
+
+    if (!force && method === 'GET' && cache[cacheName]) {
+      setData(cache[cacheName]);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -30,7 +41,7 @@ export default function useFetch<DataReturnType>() {
       });
 
       let json = await res.json();
-
+      cache[cacheName] = json;
       setData(json);
       setError(null);
     } catch (err: unknown) {
@@ -61,4 +72,5 @@ type FetchProps = {
   variables?: object;
   endpoint: string;
   method: 'GET'|'POST'|'PUT'|'DELETE';
+  force?: boolean;
 };

@@ -12,18 +12,20 @@ export const useWorkoutHistory = () => {
 
   let { uid } = useLoggedInUser() || {};
 
-  const getWorkoutHistoryFn = useCallback(async () => {
+  const getWorkoutHistoryFn = useCallback(async (args?: { force?: boolean }) => {
     if (!uid) return;
 
     await getWorkoutHistory({
       endpoint: `/api/v1/history/${uid}`,
       method: 'GET',
+      force: args?.force,
     });
   }, [getWorkoutHistory, uid]);
 
   useEffect(() => {
-    getWorkoutHistoryFn();
-  }, [getWorkoutHistoryFn])
+    getWorkoutHistoryFn({ force: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   let formattedData: CompletedWorkout[]|null = null;
 
