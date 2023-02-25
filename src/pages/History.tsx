@@ -15,7 +15,7 @@ const WorkoutHistory = () => {
     data: getWorkoutHistoryData,
     loading: getWorkoutHistoryLoading,
     // TODO: Use this error to display an error message if any.
-    // error, // Uncomment this line.
+    // error, // Uncomment this line and use this error to display an error message if any.
   } = useWorkoutHistory();
 
   let { uid } = useLoggedInUser() || {};
@@ -27,7 +27,6 @@ const WorkoutHistory = () => {
     reset: resetWorkoutHistory,
   } = useFetch<{ Message: string }>();
 
-  // TODO: Use this function to delete a workout history.
   const onDeleteWorkout = async (id: string) => {
     if (!uid) return;
 
@@ -53,11 +52,14 @@ const WorkoutHistory = () => {
     });
   }
 
+  // Show a loading alert when the workout history is loading.
   useLoadingAlert({
     loading: getWorkoutHistoryLoading,
     message: 'Change this message.', // TODO: Change this loading message.
   });
 
+  // Show a loading alert when the workout history is in the process of
+  // deleting.
   useLoadingAlert({
     loading: deleteWorkoutHistoryLoading,
     message: 'Change this message.', // TODO: Change this loading message.
@@ -69,6 +71,7 @@ const WorkoutHistory = () => {
       <IonContent fullscreen>
         {getWorkoutHistoryData &&
           getWorkoutHistoryData.map((workoutHistory) => {
+            // TODO: Play around with the data and display it in a nice way.
             return (
               <div key={workoutHistory.id}>
                 <h1>{workoutHistory.date}</h1>
@@ -78,6 +81,10 @@ const WorkoutHistory = () => {
             );
           })
         }
+        {/*
+          TODO: This is how the data looks as a JS object. Feel free to delete
+          this.
+        */}
         <pre>
           {getWorkoutHistoryData && JSON.stringify(getWorkoutHistoryData, null, 2)}
         </pre>
