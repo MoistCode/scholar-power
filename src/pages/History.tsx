@@ -1,4 +1,5 @@
-import { IonContent, IonPage, useIonToast } from '@ionic/react';
+import { IonContent, IonPage, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, useIonToast } from '@ionic/react';
+import { trashOutline } from "ionicons/icons";
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
 import useLoadingAlert from '../hooks/useLoadingAlert';
@@ -55,12 +56,12 @@ const WorkoutHistory = () => {
 
   useLoadingAlert({
     loading: getWorkoutHistoryLoading,
-    message: 'Change this message.', // TODO: Change this loading message.
+    message: 'Getting Workout History',
   });
 
   useLoadingAlert({
     loading: deleteWorkoutHistoryLoading,
-    message: 'Change this message.', // TODO: Change this loading message.
+    message: 'Deleting Workout History',
   });
 
   return (
@@ -71,9 +72,19 @@ const WorkoutHistory = () => {
           getWorkoutHistoryData.map((workoutHistory) => {
             return (
               <div key={workoutHistory.id}>
-                <h1>{workoutHistory.date}</h1>
+                {/* <h1>{workoutHistory.date}</h1>
                 <p>{workoutHistory.duration}</p>
-                <button onClick={() => onDeleteWorkout(workoutHistory.id)}>Delete</button>
+                <button onClick={() => onDeleteWorkout(workoutHistory.id)}>Delete</button> */}
+                <IonCard>
+                  <IonCardHeader>
+                    <IonCardTitle>{workoutHistory.date}</IonCardTitle>
+                    <IonCardSubtitle>Duration: {workoutHistory.duration}</IonCardSubtitle>
+                  </IonCardHeader>
+
+                  <IonButton fill="clear" onClick={() => onDeleteWorkout(workoutHistory.id)}>
+                    <IonIcon slot="icon-only" icon={trashOutline} />
+                  </IonButton>
+                </IonCard>
               </div>
             );
           })
