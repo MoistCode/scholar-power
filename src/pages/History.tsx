@@ -16,7 +16,7 @@ const WorkoutHistory = () => {
     data: getWorkoutHistoryData,
     loading: getWorkoutHistoryLoading,
     // TODO: Use this error to display an error message if any.
-    // error, // Uncomment this line.
+    // error, // Uncomment this line and use this error to display an error message if any.
   } = useWorkoutHistory();
 
   let { uid } = useLoggedInUser() || {};
@@ -28,7 +28,6 @@ const WorkoutHistory = () => {
     reset: resetWorkoutHistory,
   } = useFetch<{ Message: string }>();
 
-  // TODO: Use this function to delete a workout history.
   const onDeleteWorkout = async (id: string) => {
     if (!uid) return;
 
@@ -54,11 +53,14 @@ const WorkoutHistory = () => {
     });
   }
 
+  // Show a loading alert when the workout history is loading.
   useLoadingAlert({
     loading: getWorkoutHistoryLoading,
     message: 'Getting Workout History',
   });
 
+  // Show a loading alert when the workout history is in the process of
+  // deleting.
   useLoadingAlert({
     loading: deleteWorkoutHistoryLoading,
     message: 'Deleting Workout History',
@@ -70,6 +72,7 @@ const WorkoutHistory = () => {
       <IonContent fullscreen>
         {getWorkoutHistoryData &&
           getWorkoutHistoryData.map((workoutHistory) => {
+            // TODO: Play around with the data and display it in a nice way.
             return (
               <div key={workoutHistory.id}>
                 <IonCard>
