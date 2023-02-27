@@ -82,7 +82,7 @@ const WorkoutHistory = () => {
                   </IonCardHeader>
 
                   <IonButton fill="clear" onClick={() => onDeleteWorkout(workoutHistory.id)}>
-                    <IonIcon slot="icon-only" icon={trashOutline} />
+                    <IonIcon slot="end" icon={trashOutline} />
                   </IonButton>
                 </IonCard>
               </div>
