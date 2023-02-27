@@ -6,6 +6,8 @@ import useLoadingAlert from '../hooks/useLoadingAlert';
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
 
+import styles from './History.module.css';
+
 /**
  * This component is the page responsible for displaying the workout history.
  */
@@ -80,9 +82,11 @@ const WorkoutHistory = () => {
                     <IonCardTitle>{workoutHistory.date}</IonCardTitle>
                     <IonCardSubtitle>Duration: {workoutHistory.duration}</IonCardSubtitle>
                   </IonCardHeader>
-                  <IonButton slot="primary" fill="clear" onClick={() => onDeleteWorkout(workoutHistory.id)}>
-                    <IonIcon slot="end" icon={trashOutline} />
-                  </IonButton>
+                  <div className={styles.buttonContainer}>
+                    <IonButton fill="clear" >
+                      <IonIcon slot="icon-only" icon={trashOutline} />
+                    </IonButton>
+                  </div>
                 </IonCard>
               </div>
             );
