@@ -7,19 +7,23 @@ export const useLoggedInUser = () => {
   let uid: string | undefined;
 
   if (userToken) {
-    let {
-      expired_at: expiredAt,
-      username: decodedUsername,
-      uid: decodedUid
-    } = jwt_decode(userToken) as DecodedToken;
-
-    username = decodedUsername;
-    uid = decodedUid;
+    try {
+      let {
+        expired_at: expiredAt,
+        username: decodedUsername,
+        uid: decodedUid
+      } = jwt_decode(userToken) as DecodedToken;
   
-    if (new Date() >= new Date(expiredAt)) {
-      localStorage.removeItem('user_token');
-      window.location.href = window.location.origin;
-    }    
+      username = decodedUsername;
+      uid = decodedUid;
+    
+      if (new Date() >= new Date(expiredAt)) {
+        localStorage.removeItem('user_token');
+        window.location.href = window.location.origin;
+      }    
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
   }
   // NOT SECURE. THIS SIMPLY DECODES IT. THERE IS NO VERIFICATION HERE.
 
