@@ -1,4 +1,5 @@
-import { IonContent, IonPage, useIonToast } from '@ionic/react';
+import { IonContent, IonPage, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, useIonToast } from '@ionic/react';
+import { trashOutline } from "ionicons/icons";
 import Header from '../components/Header';
 import useFetch from '../hooks/useFetch';
 import useLoadingAlert from '../hooks/useLoadingAlert';
@@ -55,14 +56,14 @@ const WorkoutHistory = () => {
   // Show a loading alert when the workout history is loading.
   useLoadingAlert({
     loading: getWorkoutHistoryLoading,
-    message: 'Change this message.', // TODO: Change this loading message.
+    message: 'Getting Workout History',
   });
 
   // Show a loading alert when the workout history is in the process of
   // deleting.
   useLoadingAlert({
     loading: deleteWorkoutHistoryLoading,
-    message: 'Change this message.', // TODO: Change this loading message.
+    message: 'Deleting Workout History',
   });
 
   return (
@@ -74,20 +75,20 @@ const WorkoutHistory = () => {
             // TODO: Play around with the data and display it in a nice way.
             return (
               <div key={workoutHistory.id}>
-                <h1>{workoutHistory.date}</h1>
-                <p>{workoutHistory.duration}</p>
-                <button onClick={() => onDeleteWorkout(workoutHistory.id)}>Delete</button>
+                <IonCard>
+                  <IonCardHeader>
+                    <IonCardTitle>{workoutHistory.date}</IonCardTitle>
+                    <IonCardSubtitle>Duration: {workoutHistory.duration}</IonCardSubtitle>
+                  </IonCardHeader>
+
+                  <IonButton fill="clear" onClick={() => onDeleteWorkout(workoutHistory.id)}>
+                    <IonIcon slot="icon-only" icon={trashOutline} />
+                  </IonButton>
+                </IonCard>
               </div>
             );
           })
         }
-        {/*
-          TODO: This is how the data looks as a JS object. Feel free to delete
-          this.
-        */}
-        <pre>
-          {getWorkoutHistoryData && JSON.stringify(getWorkoutHistoryData, null, 2)}
-        </pre>
       </IonContent>
     </IonPage>
   );
