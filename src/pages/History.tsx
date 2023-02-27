@@ -72,9 +72,6 @@ const WorkoutHistory = () => {
           getWorkoutHistoryData.map((workoutHistory) => {
             return (
               <div key={workoutHistory.id}>
-                {/* <h1>{workoutHistory.date}</h1>
-                <p>{workoutHistory.duration}</p>
-                <button onClick={() => onDeleteWorkout(workoutHistory.id)}>Delete</button> */}
                 <IonCard>
                   <IonCardHeader>
                     <IonCardTitle>{workoutHistory.date}</IonCardTitle>
@@ -89,9 +86,6 @@ const WorkoutHistory = () => {
             );
           })
         }
-        <pre>
-          {getWorkoutHistoryData && JSON.stringify(getWorkoutHistoryData, null, 2)}
-        </pre>
       </IonContent>
     </IonPage>
   );
