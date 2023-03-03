@@ -1,6 +1,6 @@
 import { IonPage, IonContent, IonButton, IonBackButton, IonButtons, IonTitle, IonToolbar, IonHeader, IonLabel, IonList, IonText, IonIcon, IonInput, IonItem, useIonToast } from "@ionic/react";
 import { informationCircleOutline, trashOutline } from "ionicons/icons";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
 import { useEditWorkoutPlan } from "../hooks/useEditWorkoutPlan";
@@ -24,10 +24,9 @@ const EditWorkout = (props: { match: { url: string }}) => {
   const id = urlParts[2];
 
   const [disableFinishButton, setDisableFinishButton] = useState(true);
-  const [workoutName, setWorkoutName] = useState<string|undefined>();
+  const [workoutName, setWorkoutName] = useState<string>('');
   const [counter, setCounter] = useState(0);
   const [listOfExercises, setListOfExercises] = useState<CurrentListOfExercises[]|undefined>();
-  const workoutNameRef = useRef<HTMLIonInputElement>(null);
 
   let { uid } = useLoggedInUser() || {};
 
@@ -85,11 +84,9 @@ const EditWorkout = (props: { match: { url: string }}) => {
       return;
     }
 
-    const workoutName = workoutNameRef.current?.value;
-
     const variables: EditWorkoutVariables = {
       uid,
-      name: workoutName ? String(workoutName) : '',
+      name: workoutName,
       exercises: []
     };
 
@@ -116,7 +113,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
     }
 
     editNewWorkoutPlanFn({ planId: id, variables });
-  }, [editNewWorkoutPlanFn, id, isEditingWorkoutPlan, listOfExercises, uid]);
+  }, [editNewWorkoutPlanFn, id, isEditingWorkoutPlan, listOfExercises, uid, workoutName]);
 
   const dispatch = useDispatch();
 
@@ -128,14 +125,14 @@ const EditWorkout = (props: { match: { url: string }}) => {
   useEffect(() => {
     if (!listOfExercises) return;
 
-    if (listOfExercises.length > 0 && disableFinishButton) {
+    if (listOfExercises.length > 0 && workoutName && disableFinishButton) {
       setDisableFinishButton(false);
     }
 
-    if (!listOfExercises.length && !disableFinishButton) {
+    if ((!listOfExercises.length || !workoutName) && !disableFinishButton) {
       setDisableFinishButton(true);
     }
-  }, [disableFinishButton, listOfExercises]);
+  }, [disableFinishButton, listOfExercises, workoutName]);
 
   const onSelectExercise = useCallback((exercise: ExerciseOptionItem) => {
     const { id: exerciseId, name, instructions, equipment } = exercise;
@@ -241,7 +238,7 @@ const EditWorkout = (props: { match: { url: string }}) => {
             <IonLabel>Workout Name:</IonLabel>
             <IonInput
               value={workoutName}
-              ref={workoutNameRef}
+              onIonChange={(e) => setWorkoutName(e.detail.value!)}
               placeholder="Enter workout name"
             />
           </IonItem>

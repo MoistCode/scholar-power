@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { Redirect } from "react-router";
 
 const CreateWorkout = () => {
-  const workoutNameRef = useRef<HTMLIonInputElement>(null);
+  const [workoutName, setWorkoutName] = useState('');
 
   const [counter, setCounter] = useState(0);
   const [disableFinishButton, setDisableFinishButton] = useState(true);
@@ -40,15 +40,13 @@ const CreateWorkout = () => {
   const onCreateNewWorkout = useCallback(() => {
     if (isCreatingWorkoutPlan) return;
 
-    const workoutName = workoutNameRef.current?.value;
-
     if (!uid) {
       return;
     }
 
     const variables: CreateWorkoutVariables = {
       uid,
-      name: workoutName ? String(workoutName) : '',
+      name: workoutName,
       exercises: []
     };
 
@@ -71,7 +69,7 @@ const CreateWorkout = () => {
     }
 
     createNewWorkoutPlanFn(variables);
-  }, [createNewWorkoutPlanFn, isCreatingWorkoutPlan, listOfExercises, uid]);
+  }, [createNewWorkoutPlanFn, isCreatingWorkoutPlan, listOfExercises, uid, workoutName]);
 
   const [present] = useIonToast();
 
@@ -110,14 +108,14 @@ const CreateWorkout = () => {
   useEffect(() => {
     if (!listOfExercises) return;
 
-    if (listOfExercises.length > 0 && disableFinishButton) {
+    if (listOfExercises.length > 0 && workoutName && disableFinishButton) {
       setDisableFinishButton(false);
     }
 
-    if (!listOfExercises.length && !disableFinishButton) {
+    if ((!listOfExercises.length || !workoutName) && !disableFinishButton) {
       setDisableFinishButton(true);
     }
-  }, [disableFinishButton, listOfExercises]);
+  }, [disableFinishButton, listOfExercises, workoutName]);
 
   const onDeleteExercise = useCallback((dataAttribute: string) => {
     const newListOfExercises = listOfExercises.filter((exercise) => {
@@ -168,7 +166,7 @@ const CreateWorkout = () => {
         <IonList>
           <IonItem>
             <IonLabel>Workout Name:</IonLabel>
-            <IonInput ref={workoutNameRef} placeholder="Enter workout name" />
+            <IonInput value={workoutName} onIonChange={(e) => setWorkoutName(e.detail.value!)} placeholder="Enter workout name" />
           </IonItem>
           {listOfExercises.map((exercise) => {
             const {
