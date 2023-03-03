@@ -83,7 +83,7 @@ const WorkoutHistory = () => {
                     <IonCardSubtitle>Duration: {workoutHistory.duration}</IonCardSubtitle>
                   </IonCardHeader>
                   <div className={styles.buttonContainer}>
-                    <IonButton fill="clear" >
+                    <IonButton onClick={() => onDeleteWorkout(workoutHistory.id)} fill="clear" >
                       <IonIcon slot="icon-only" icon={trashOutline} />
                     </IonButton>
                   </div>
