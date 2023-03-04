@@ -1,0 +1,19 @@
+.wrapper {
+  background: linear-gradient(to bottom right, #0263e1, #eb1836);
+  border-radius: 22px;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  max-width: max-content;
+  margin: 10px auto;
+}
+
+.timer {
+  align-items: center;
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  display: flex;
+  margin: 4px;
+  padding: 0px 20px;
+  font-size: 55px;
+}

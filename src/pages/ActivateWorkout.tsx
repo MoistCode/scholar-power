@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import ExerciseDescriptionModal from "../components/ExerciseDescriptionModal";
+import Timer from "../components/Timer";
 import { useExerciseList } from "../hooks/useExerciseList";
 import useFetch from "../hooks/useFetch";
 import useLoadingAlert from "../hooks/useLoadingAlert";
@@ -131,46 +132,51 @@ const ActivateWorkout = (props: { match: { url: string }}) => {
             <h1>Something went wrong. Please try again later.</h1>
           </IonText>
         }
-        {listOfExercises?.map((exercise) => {
-          const {
-            name,
-            instructions,
-            dataAttribute,
-            load,
-            sets,
-            reps,
-          } = exercise;
-
-          let triggerId = `open-activate-exercise-descripton-modal-${dataAttribute}`;
-
-          return (
-            <IonList
-              className="ion-padding"
-              key={dataAttribute}
-              data-exercise-item={dataAttribute}
-            >
-              <IonItem>
-                <IonLabel>{name}</IonLabel>
-                <IonButton fill="clear" id={triggerId}>
-                  <IonIcon slot="icon-only" icon={informationCircleOutline} />
-                </IonButton>
-                <ExerciseDescriptionModal
-                  triggerId={triggerId}
-                  instructions={instructions}
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel>Sets: {sets}</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>Reps: {reps}</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>Load: {load}</IonLabel>
-              </IonItem>
-            </IonList>
-          );
-        })}
+        {listOfExercises && listOfExercises.length > 0 &&
+          <>
+            <Timer />
+            {listOfExercises?.map((exercise) => {
+              const {
+                name,
+                instructions,
+                dataAttribute,
+                load,
+                sets,
+                reps,
+              } = exercise;
+    
+              let triggerId = `open-activate-exercise-descripton-modal-${dataAttribute}`;
+    
+              return (
+                <IonList
+                  className="ion-padding"
+                  key={dataAttribute}
+                  data-exercise-item={dataAttribute}
+                >
+                  <IonItem>
+                    <IonLabel>{name}</IonLabel>
+                    <IonButton fill="clear" id={triggerId}>
+                      <IonIcon slot="icon-only" icon={informationCircleOutline} />
+                    </IonButton>
+                    <ExerciseDescriptionModal
+                      triggerId={triggerId}
+                      instructions={instructions}
+                    />
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Sets: {sets}</IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Reps: {reps}</IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Load: {load}</IonLabel>
+                  </IonItem>
+                </IonList>
+              );
+            })}
+          </>
+        }
       </IonContent>
     </IonPage>
   );
